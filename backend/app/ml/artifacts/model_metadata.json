@@ -1,9 +1,9 @@
 {
     "model_name": "Logistic Regression",
-    "training_date": "2026-09-29T20:33:02.687596",
-    "dataset_size": 1012,
-    "training_samples": 809,
-    "test_samples": 203,
+    "training_date": "2026-10-19T06:31:24.568301",
+    "dataset_size": 1200,
+    "training_samples": 960,
+    "test_samples": 240,
     "features": 5000,
     "random_state": 42,
     "vectorizer": "TfidfVectorizer",

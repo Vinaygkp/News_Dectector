@@ -114,24 +114,24 @@ export default function AnalyzingPage() {
       
       {/* Dynamic Ambient Background Glows */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-[550px] h-[550px] bg-gradient-to-br from-cyan-500/10 via-purple-600/15 to-transparent rounded-full blur-[150px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-[550px] h-[550px] bg-gradient-to-tl from-pink-500/10 via-rose-500/10 to-transparent rounded-full blur-[150px]" />
+        <div className="absolute top-1/4 left-1/4 w-[280px] sm:w-[500px] h-[280px] sm:h-[500px] bg-gradient-to-br from-cyan-500/10 via-purple-600/15 to-transparent rounded-full blur-[100px] sm:blur-[150px]" />
+        <div className="absolute bottom-1/4 right-1/4 w-[280px] sm:w-[500px] h-[280px] sm:h-[500px] bg-gradient-to-tl from-pink-500/10 via-rose-500/10 to-transparent rounded-full blur-[100px] sm:blur-[150px]" />
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#00ffff08_1px,transparent_1px),linear-gradient(to_bottom,#00ffff08_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-35" />
       </div>
 
-      <div className="relative z-10 max-w-xl w-full text-center space-y-8">
+      <div className="relative z-10 max-w-xl w-full text-center space-y-6 sm:space-y-8">
         
         {/* Pulsing Neural Core Animation */}
-        <div className="relative w-28 h-28 mx-auto flex items-center justify-center">
+        <div className="relative w-24 sm:w-28 h-24 sm:h-28 mx-auto flex items-center justify-center">
           <div className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500 animate-spin p-[2px] shadow-[0_0_30px_rgba(0,242,254,0.6)]">
             <div className="w-full h-full bg-black rounded-full" />
           </div>
           <motion.div
             animate={{ scale: [1, 1.15, 1], rotate: [0, 180, 360] }}
             transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-            className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-cyan-500/30 via-purple-600/30 to-pink-500/30 border border-cyan-400/50 flex items-center justify-center backdrop-blur-md shadow-[0_0_20px_#00f2fe]"
+            className="w-14 sm:w-16 h-14 sm:h-16 rounded-2xl bg-gradient-to-tr from-cyan-500/30 via-purple-600/30 to-pink-500/30 border border-cyan-400/50 flex items-center justify-center backdrop-blur-md shadow-[0_0_20px_#00f2fe]"
           >
-            <Brain className="w-8 h-8 text-cyan-300" />
+            <Brain className="w-7 sm:w-8 h-7 sm:h-8 text-cyan-300" />
           </motion.div>
         </div>
 
@@ -158,25 +158,25 @@ export default function AnalyzingPage() {
 
         {/* Error State if any */}
         {errorMessage ? (
-          <div className="p-6 rounded-2xl bg-red-950/40 border border-red-500/40 space-y-4">
+          <div className="p-5 sm:p-6 rounded-2xl bg-red-950/40 border border-red-500/40 space-y-4">
             <div className="flex items-center justify-center gap-2 text-rose-400 font-bold text-sm">
-              <AlertCircle className="w-5 h-5" />
+              <AlertCircle className="w-5 h-5 flex-shrink-0" />
               <span>{errorMessage}</span>
             </div>
-            <div className="flex justify-center gap-4">
+            <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
               <button
                 onClick={() => {
                   setIsRetrying(true);
                   runAnalysis();
                 }}
-                className="px-6 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-bold text-xs uppercase tracking-wider flex items-center gap-2 transition-all cursor-pointer"
+                className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer"
               >
                 <RefreshCw className="w-3.5 h-3.5" />
                 <span>Try Again</span>
               </button>
               <button
                 onClick={() => navigate('/analyzer')}
-                className="px-6 py-2.5 rounded-xl bg-black/60 border border-white/20 text-gray-300 hover:text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 transition-all cursor-pointer"
+                className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-black/60 border border-white/20 text-gray-300 hover:text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>Back to News Input</span>

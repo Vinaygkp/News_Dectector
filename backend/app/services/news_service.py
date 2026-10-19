@@ -268,9 +268,13 @@ async def fetch_live_news(
                 # Concurrent multi-category harvest with asyncio.gather
                 tasks = [
                     fetch_single_category(client, api_key, "general", lang=language, country=country, max_items=10),
+                    fetch_single_category(client, api_key, "world", lang=language, country=country, max_items=10),
                     fetch_single_category(client, api_key, "technology", lang=language, country=country, max_items=10),
                     fetch_single_category(client, api_key, "business", lang=language, country=country, max_items=10),
                     fetch_single_category(client, api_key, "sports", lang=language, country=country, max_items=10),
+                    fetch_single_category(client, api_key, "science", lang=language, country=country, max_items=10),
+                    fetch_single_category(client, api_key, "health", lang=language, country=country, max_items=10),
+                    fetch_single_category(client, api_key, "entertainment", lang=language, country=country, max_items=10),
                 ]
                 results = await asyncio.gather(*tasks, return_exceptions=True)
                 for res in results:
@@ -308,6 +312,12 @@ async def fetch_live_news(
                 "published_at": pub_dt.isoformat() if pub_dt else datetime.utcnow().isoformat(),
                 "category": detected_category
             })
+
+        # Sort strictly by published_at DESC (newest first, up-to-date day by day)
+        normalized_articles.sort(
+            key=lambda x: x.get("published_at") or "",
+            reverse=True
+        )
 
         # Save to memory cache
         _MEMORY_CACHE[cache_key] = {

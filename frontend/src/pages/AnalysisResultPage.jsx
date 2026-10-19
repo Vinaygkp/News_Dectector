@@ -206,41 +206,41 @@ export default function AnalysisResultPage() {
 
 
   return (
-    <div className="bg-slate-50 dark:bg-[#000000] text-slate-900 dark:text-white pt-36 sm:pt-40 pb-24 min-h-screen relative overflow-hidden transition-colors duration-300">
+    <div className="bg-slate-50 dark:bg-[#000000] text-slate-900 dark:text-white pt-24 sm:pt-28 md:pt-36 pb-16 sm:pb-24 min-h-screen relative overflow-hidden transition-colors duration-300">
       
       {/* Background Glows */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className={`absolute top-20 left-1/4 w-[600px] h-[600px] rounded-full blur-[160px] ${
+        <div className={`absolute top-20 left-1/4 w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] rounded-full blur-[100px] sm:blur-[160px] ${
           isFake ? 'bg-rose-600/10' : 'bg-cyan-600/10'
         }`} />
-        <div className="absolute top-1/2 right-1/4 w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-[170px]" />
-        <div className="absolute bottom-20 left-1/3 w-[500px] h-[500px] bg-pink-600/10 rounded-full blur-[150px]" />
+        <div className="absolute top-1/2 right-1/4 w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] bg-purple-600/10 rounded-full blur-[100px] sm:blur-[170px]" />
+        <div className="absolute bottom-20 left-1/3 w-[260px] sm:w-[500px] h-[260px] sm:h-[500px] bg-pink-600/10 rounded-full blur-[100px] sm:blur-[150px]" />
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-10">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-6 sm:space-y-10">
         
         {/* Top Header & Quick Action */}
-        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-gray-200 dark:border-white/10 pb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-200 dark:border-white/10 pb-5 sm:pb-6">
           <div className="space-y-1">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-500/10 dark:bg-cyan-950/70 border border-cyan-500/30 dark:border-cyan-500/50 text-cyan-700 dark:text-cyan-300 text-xs font-black uppercase tracking-wider shadow-sm">
+            <div className="inline-flex items-center gap-2 px-3 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-cyan-500/10 dark:bg-cyan-950/70 border border-cyan-500/30 dark:border-cyan-500/50 text-cyan-700 dark:text-cyan-300 text-[11px] sm:text-xs font-black uppercase tracking-wider shadow-sm">
               <Sparkles className="w-3.5 h-3.5 text-pink-500" />
               <span>VERIFICATION REPORT</span>
             </div>
-            <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight font-serif">
+            <h1 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight font-serif">
               News Verification Result
             </h1>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 w-full sm:w-auto">
             <Link
               to="/"
-              className="px-5 py-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 dark:bg-black/60 dark:hover:bg-white/10 border border-gray-300 dark:border-white/15 text-gray-700 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white font-bold text-xs uppercase tracking-wider transition-all shadow-sm"
+              className="w-full sm:w-auto text-center px-5 py-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 dark:bg-black/60 dark:hover:bg-white/10 border border-gray-300 dark:border-white/15 text-gray-700 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white font-bold text-xs uppercase tracking-wider transition-all shadow-sm"
             >
               Home
             </Link>
             <button
               onClick={handleAnalyzeAnother}
-              className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 via-purple-600 to-pink-500 hover:opacity-95 text-white font-black text-xs uppercase tracking-wider shadow-[0_0_20px_rgba(6,182,212,0.4)] flex items-center gap-2 transition-all cursor-pointer hover:scale-105 active:scale-95"
+              className="w-full sm:w-auto justify-center px-6 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 via-purple-600 to-pink-500 hover:opacity-95 text-white font-black text-xs uppercase tracking-wider shadow-[0_0_20px_rgba(6,182,212,0.4)] flex items-center gap-2 transition-all cursor-pointer hover:scale-105 active:scale-95"
             >
               <RotateCcw className="w-4 h-4" />
               <span>Check Another Story</span>
@@ -253,30 +253,30 @@ export default function AnalysisResultPage() {
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.4 }}
-          className={`p-6 sm:p-10 rounded-3xl border backdrop-blur-xl relative overflow-hidden shadow-xl ${
+          className={`p-5 sm:p-8 lg:p-10 rounded-2xl sm:rounded-3xl border backdrop-blur-xl relative overflow-hidden shadow-xl ${
             isFake 
               ? 'bg-gradient-to-br from-rose-50 via-white to-red-50 dark:from-[#1a050f]/95 dark:via-[#0c0207]/95 dark:to-black border-rose-300 dark:border-rose-500/40 shadow-[0_0_40px_rgba(244,63,94,0.15)]' 
               : 'bg-gradient-to-br from-cyan-50 via-white to-emerald-50 dark:from-[#02181d]/95 dark:via-[#010e11]/95 dark:to-black border-cyan-300 dark:border-cyan-500/40 shadow-[0_0_40px_rgba(6,182,212,0.15)]'
           }`}
         >
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
             
             {/* Left Result Explanation */}
-            <div className="lg:col-span-8 space-y-6">
+            <div className="lg:col-span-8 space-y-4 sm:space-y-6">
               
               {/* Result Badge */}
               <div className="flex items-center gap-3">
                 {isFake ? (
-                  <div className="inline-flex items-center gap-3 px-6 py-3 rounded-2xl bg-rose-500/10 dark:bg-rose-500/20 border-2 border-rose-500/50 shadow-md">
-                    <AlertTriangle className="w-7 h-7 text-rose-600 dark:text-rose-400 stroke-[2.5]" />
-                    <span className="text-2xl sm:text-4xl font-black text-rose-600 dark:text-rose-300 tracking-wider font-serif">
+                  <div className="inline-flex items-center gap-2.5 sm:gap-3 px-4 sm:px-6 py-2 sm:py-3 rounded-xl sm:rounded-2xl bg-rose-500/10 dark:bg-rose-500/20 border-2 border-rose-500/50 shadow-md">
+                    <AlertTriangle className="w-6 h-6 sm:w-7 sm:h-7 text-rose-600 dark:text-rose-400 stroke-[2.5]" />
+                    <span className="text-xl sm:text-3xl lg:text-4xl font-black text-rose-600 dark:text-rose-300 tracking-wider font-serif">
                       FAKE NEWS
                     </span>
                   </div>
                 ) : (
-                  <div className="inline-flex items-center gap-3 px-6 py-3 rounded-2xl bg-emerald-500/10 dark:bg-emerald-500/20 border-2 border-emerald-500/50 shadow-md">
-                    <ShieldCheck className="w-7 h-7 text-emerald-600 dark:text-emerald-400 stroke-[2.5]" />
-                    <span className="text-2xl sm:text-4xl font-black text-emerald-600 dark:text-emerald-300 tracking-wider font-serif">
+                  <div className="inline-flex items-center gap-2.5 sm:gap-3 px-4 sm:px-6 py-2 sm:py-3 rounded-xl sm:rounded-2xl bg-emerald-500/10 dark:bg-emerald-500/20 border-2 border-emerald-500/50 shadow-md">
+                    <ShieldCheck className="w-6 h-6 sm:w-7 sm:h-7 text-emerald-600 dark:text-emerald-400 stroke-[2.5]" />
+                    <span className="text-xl sm:text-3xl lg:text-4xl font-black text-emerald-600 dark:text-emerald-300 tracking-wider font-serif">
                       REAL NEWS
                     </span>
                   </div>
@@ -284,7 +284,7 @@ export default function AnalysisResultPage() {
               </div>
 
               {/* Simple Human Summary Description */}
-              <p className="text-slate-800 dark:text-gray-100 text-base sm:text-lg leading-relaxed font-medium">
+              <p className="text-slate-800 dark:text-gray-100 text-sm sm:text-base lg:text-lg leading-relaxed font-medium">
                 {isFake ? (
                   <span>
                     This story shows strong signs of being <strong className="text-rose-600 dark:text-rose-400">Fake News</strong>. It uses sensational wording, unproven claims, or emotional manipulation commonly seen in viral internet rumors.
@@ -297,8 +297,8 @@ export default function AnalysisResultPage() {
               </p>
 
               {/* Quick Info Badges */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
-                <div className="p-3.5 rounded-xl bg-white dark:bg-black/60 border border-gray-200 dark:border-white/10 space-y-1 shadow-sm">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3 pt-2">
+                <div className="p-3 sm:p-3.5 rounded-xl bg-white dark:bg-black/60 border border-gray-200 dark:border-white/10 space-y-1 shadow-sm">
                   <div className="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-bold flex items-center gap-1">
                     <Shield className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" />
                     <span>Verdict</span>
@@ -308,7 +308,7 @@ export default function AnalysisResultPage() {
                   </div>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-white dark:bg-black/60 border border-gray-200 dark:border-white/10 space-y-1 shadow-sm">
+                <div className="p-3 sm:p-3.5 rounded-xl bg-white dark:bg-black/60 border border-gray-200 dark:border-white/10 space-y-1 shadow-sm">
                   <div className="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-bold flex items-center gap-1">
                     <Clock className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
                     <span>Check Time</span>
@@ -318,7 +318,7 @@ export default function AnalysisResultPage() {
                   </div>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-white dark:bg-black/60 border border-gray-200 dark:border-white/10 space-y-1 shadow-sm">
+                <div className="p-3 sm:p-3.5 rounded-xl bg-white dark:bg-black/60 border border-gray-200 dark:border-white/10 space-y-1 shadow-sm">
                   <div className="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-bold flex items-center gap-1">
                     <FileText className="w-3.5 h-3.5 text-pink-600 dark:text-pink-400" />
                     <span>Word Count</span>
@@ -328,19 +328,19 @@ export default function AnalysisResultPage() {
                   </div>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-white dark:bg-black/60 border border-gray-200 dark:border-white/10 space-y-1 shadow-sm">
+                <div className="p-3 sm:p-3.5 rounded-xl bg-white dark:bg-black/60 border border-gray-200 dark:border-white/10 space-y-1 shadow-sm">
                   <div className="text-[10px] text-gray-500 dark:text-gray-400 uppercase font-bold flex items-center gap-1">
                     <Database className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                     <span>Checked Against</span>
                   </div>
-                  <div className="text-xs font-black text-emerald-600 dark:text-emerald-300">
+                  <div className="text-xs font-black text-emerald-600 dark:text-emerald-300 truncate">
                     {totalDatasetRecords}
                   </div>
                 </div>
               </div>
 
               {/* Friendly Note */}
-              <div className="p-3.5 rounded-xl bg-gray-100/90 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
+              <div className="p-3 sm:p-3.5 rounded-xl bg-gray-100/90 dark:bg-black/40 border border-gray-200 dark:border-white/10 text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
                 <strong>Note: </strong>
                 This assessment is based on writing patterns and language analysis. We always recommend double-checking important breaking news with multiple official sources.
               </div>
@@ -348,7 +348,7 @@ export default function AnalysisResultPage() {
             </div>
 
             {/* Right Confidence Gauge */}
-            <div className="lg:col-span-4 flex flex-col items-center justify-center p-6 bg-white dark:bg-black/60 rounded-3xl border border-gray-200 dark:border-white/10 shadow-sm">
+            <div className="lg:col-span-4 flex flex-col items-center justify-center p-4 sm:p-6 bg-white dark:bg-black/60 rounded-2xl sm:rounded-3xl border border-gray-200 dark:border-white/10 shadow-sm">
               <div className="text-xs uppercase font-black tracking-wider text-gray-700 dark:text-gray-300 mb-3">
                 Confidence Score
               </div>
@@ -362,7 +362,7 @@ export default function AnalysisResultPage() {
         </motion.div>
 
         {/* ================= 2. SUBMITTED NEWS ARTICLE ================= */}
-        <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#030611]/90 border border-gray-200 dark:border-white/10 shadow-sm space-y-4">
+        <div className="p-4 sm:p-8 rounded-2xl sm:rounded-3xl bg-white dark:bg-[#030611]/90 border border-gray-200 dark:border-white/10 shadow-sm space-y-4">
           <div className="flex items-center gap-2 text-xs font-black text-cyan-700 dark:text-cyan-300 uppercase tracking-wider">
             <FileText className="w-4 h-4" />
             <span>The Story You Analyzed</span>
@@ -412,13 +412,13 @@ export default function AnalysisResultPage() {
         </div>
 
         {/* ================= 4. STEP-BY-STEP VERIFICATION FLOW ================= */}
-        <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#030611]/90 border border-gray-200 dark:border-white/10 shadow-sm space-y-4">
+        <div className="p-4 sm:p-8 rounded-2xl sm:rounded-3xl bg-white dark:bg-[#030611]/90 border border-gray-200 dark:border-white/10 shadow-sm space-y-4">
           <div className="text-xs font-black text-cyan-700 dark:text-cyan-300 uppercase tracking-wider flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4 text-cyan-500" />
             <span>How We Checked This News (Step-by-Step)</span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-5 gap-3 text-center">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-3 text-center">
             {[
               { step: '1', title: 'Read Input', desc: 'Read headline & article body' },
               { step: '2', title: 'Clean Text', desc: 'Remove formatting clutter & symbols' },
@@ -426,22 +426,27 @@ export default function AnalysisResultPage() {
               { step: '4', title: 'Match Patterns', desc: 'Compare with verified database' },
               { step: '5', title: 'Final Verdict', desc: `${predictionData.prediction} (${confidenceVal}%)` },
             ].map((item, idx) => (
-              <div key={idx} className="p-4 rounded-2xl bg-gray-50 dark:bg-black/60 border border-gray-200 dark:border-white/10 space-y-1">
+              <div 
+                key={idx} 
+                className={`p-3.5 sm:p-4 rounded-xl sm:rounded-2xl bg-gray-50 dark:bg-black/60 border border-gray-200 dark:border-white/10 space-y-1 ${
+                  idx === 4 ? 'col-span-2 sm:col-span-1' : ''
+                }`}
+              >
                 <div className="w-6 h-6 rounded-full bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 font-bold text-xs flex items-center justify-center mx-auto mb-1">
                   {item.step}
                 </div>
                 <div className="text-xs font-black text-slate-900 dark:text-white">{item.title}</div>
-                <div className="text-[11px] text-gray-500 dark:text-gray-400">{item.desc}</div>
+                <div className="text-[10px] sm:text-[11px] text-gray-500 dark:text-gray-400">{item.desc}</div>
               </div>
             ))}
           </div>
         </div>
 
         {/* ================= 5. LIVE CHARTS & GRAPHS (DYNAMIC TO THIS STORY) ================= */}
-        <div className="space-y-6 pt-2">
+        <div className="space-y-4 sm:space-y-6 pt-2">
           <div className="space-y-1">
-            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white flex items-center gap-2 font-serif">
-              <Activity className="w-6 h-6 text-pink-500" />
+            <h2 className="text-xl sm:text-3xl font-black text-slate-900 dark:text-white flex items-center gap-2 font-serif">
+              <Activity className="w-5 h-5 sm:w-6 sm:h-6 text-pink-500" />
               <span>Story Analysis & Credibility Graphs</span>
             </h2>
             <p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm">
@@ -449,15 +454,15 @@ export default function AnalysisResultPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             
             {/* Chart 1: Story Probability Distribution for THIS Article */}
-            <div className="p-6 rounded-3xl bg-white dark:bg-black/80 border border-gray-200 dark:border-white/10 shadow-sm space-y-3">
+            <div className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-white dark:bg-black/80 border border-gray-200 dark:border-white/10 shadow-sm space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-black uppercase text-cyan-700 dark:text-cyan-300">
+                <span className="text-[11px] sm:text-xs font-black uppercase text-cyan-700 dark:text-cyan-300">
                   1. Story Credibility Distribution
                 </span>
-                <span className="text-xs font-mono font-bold text-gray-500">
+                <span className="text-[11px] sm:text-xs font-mono font-bold text-gray-500">
                   Real: {storyRealProb}% | Fake: {storyFakeProb}%
                 </span>
               </div>
@@ -491,12 +496,12 @@ export default function AnalysisResultPage() {
             </div>
 
             {/* Chart 2: Multi-Model Consensus on THIS Article */}
-            <div className="p-6 rounded-3xl bg-white dark:bg-black/80 border border-gray-200 dark:border-white/10 shadow-sm space-y-3">
+            <div className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-white dark:bg-black/80 border border-gray-200 dark:border-white/10 shadow-sm space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-black uppercase text-emerald-700 dark:text-emerald-300">
+                <span className="text-[11px] sm:text-xs font-black uppercase text-emerald-700 dark:text-emerald-300">
                   2. Algorithm Consensus on This Story (%)
                 </span>
-                <span className="text-xs text-gray-500 font-mono">4 Trained Models</span>
+                <span className="text-[11px] sm:text-xs text-gray-500 font-mono">4 Trained Models</span>
               </div>
               <div style={{ width: '100%', height: 240 }}>
                 {storyModelConsensusData.length > 0 ? (
@@ -520,12 +525,12 @@ export default function AnalysisResultPage() {
             </div>
 
             {/* Chart 3: Credibility & Style Fingerprint for THIS Article */}
-            <div className="p-6 rounded-3xl bg-white dark:bg-black/80 border border-gray-200 dark:border-white/10 shadow-sm space-y-3">
+            <div className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-white dark:bg-black/80 border border-gray-200 dark:border-white/10 shadow-sm space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-black uppercase text-purple-700 dark:text-purple-300">
+                <span className="text-[11px] sm:text-xs font-black uppercase text-purple-700 dark:text-purple-300">
                   3. Article Credibility & Style Fingerprint
                 </span>
-                <span className="text-xs text-gray-500 font-mono">Linguistic Scan</span>
+                <span className="text-[11px] sm:text-xs text-gray-500 font-mono">Linguistic Scan</span>
               </div>
               <div style={{ width: '100%', height: 220 }}>
                 {styleFingerprintData.length > 0 ? (
@@ -533,7 +538,7 @@ export default function AnalysisResultPage() {
                     <BarChart data={styleFingerprintData} layout="vertical">
                       <CartesianGrid strokeDasharray="3 3" stroke={isDark ? '#222' : '#e2e8f0'} />
                       <XAxis type="number" domain={[0, 100]} stroke={isDark ? '#888' : '#64748b'} fontSize={10} unit="%" />
-                      <YAxis dataKey="metric" type="category" stroke={isDark ? '#888' : '#64748b'} fontSize={10} width={135} />
+                      <YAxis dataKey="metric" type="category" stroke={isDark ? '#888' : '#64748b'} fontSize={9} width={110} />
                       <Tooltip {...chartTooltipStyle} formatter={(val) => [`${val}%`, 'Score']} />
                       <Bar dataKey="score" name="Score %" radius={[0, 4, 4, 0]}>
                         {styleFingerprintData.map((entry, index) => (
@@ -551,12 +556,12 @@ export default function AnalysisResultPage() {
             </div>
 
             {/* Chart 4: Top Influential Words in THIS Article */}
-            <div className="p-6 rounded-3xl bg-white dark:bg-black/80 border border-gray-200 dark:border-white/10 shadow-sm space-y-3">
+            <div className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-white dark:bg-black/80 border border-gray-200 dark:border-white/10 shadow-sm space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-black uppercase text-pink-700 dark:text-pink-300">
+                <span className="text-[11px] sm:text-xs font-black uppercase text-pink-700 dark:text-pink-300">
                   4. Key Influential Words in This Story
                 </span>
-                <span className="text-xs text-gray-500 font-mono">TF-IDF Importance</span>
+                <span className="text-[11px] sm:text-xs text-gray-500 font-mono">TF-IDF Importance</span>
               </div>
               <div style={{ width: '100%', height: 220 }}>
                 {topKeywordsData.length > 0 ? (
@@ -586,16 +591,16 @@ export default function AnalysisResultPage() {
 
 
         {/* Bottom Navigation */}
-        <div className="flex flex-wrap items-center justify-center gap-4 pt-6">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 pt-4 sm:pt-6">
           <Link
             to="/"
-            className="px-8 py-4 rounded-2xl bg-gray-100 hover:bg-gray-200 dark:bg-black/60 dark:hover:bg-white/10 border border-gray-300 dark:border-white/20 text-slate-800 dark:text-gray-300 hover:text-black dark:hover:text-white font-black text-sm uppercase tracking-wider transition-all cursor-pointer shadow-sm"
+            className="w-full sm:w-auto text-center px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl bg-gray-100 hover:bg-gray-200 dark:bg-black/60 dark:hover:bg-white/10 border border-gray-300 dark:border-white/20 text-slate-800 dark:text-gray-300 hover:text-black dark:hover:text-white font-black text-xs sm:text-sm uppercase tracking-wider transition-all cursor-pointer shadow-sm"
           >
             Back to Home
           </Link>
           <button
             onClick={handleAnalyzeAnother}
-            className="px-8 py-4 rounded-2xl bg-gradient-to-r from-cyan-500 via-purple-600 to-pink-500 hover:opacity-95 text-white font-black text-sm uppercase tracking-wider shadow-[0_0_30px_rgba(6,182,212,0.4)] inline-flex items-center gap-2 cursor-pointer hover:scale-105 active:scale-95 transition-all"
+            className="w-full sm:w-auto justify-center px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl bg-gradient-to-r from-cyan-500 via-purple-600 to-pink-500 hover:opacity-95 text-white font-black text-xs sm:text-sm uppercase tracking-wider shadow-[0_0_30px_rgba(6,182,212,0.4)] inline-flex items-center gap-2 cursor-pointer hover:scale-105 active:scale-95 transition-all"
           >
             <RotateCcw className="w-4 h-4" />
             <span>Check Another News Story</span>

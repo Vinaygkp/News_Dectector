@@ -7,6 +7,7 @@ import {
   SlidersHorizontal, ChevronRight
 } from 'lucide-react';
 import { useApi } from '../hooks/useApi';
+import { formatDynamicTime } from '../utils/dateUtils';
 
 const CATEGORIES = [
   { id: 'all', label: 'All', color: 'from-cyan-500 to-blue-600' },
@@ -127,17 +128,17 @@ export default function LiveNewsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#050811] text-gray-100 pt-36 sm:pt-40 pb-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div className="min-h-screen bg-[#050811] text-gray-100 pt-24 sm:pt-28 md:pt-36 pb-16 sm:pb-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       
       {/* Background Neon Ambient Glows */}
-      <div className="absolute top-20 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute top-1/3 right-10 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-20 left-10 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-20 left-1/4 w-72 sm:w-96 h-72 sm:h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-1/3 right-10 w-72 sm:w-96 h-72 sm:h-96 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-20 left-10 w-72 sm:w-96 h-72 sm:h-96 bg-pink-500/10 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto space-y-8 relative z-10">
 
         {/* Header Title Section */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-white/10">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-5 sm:gap-6 pb-6 border-b border-white/10">
           <div>
             <div className="flex items-center gap-3 mb-2">
               <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-500/20 text-red-400 border border-red-500/40 text-xs font-black tracking-widest uppercase animate-pulse">
@@ -154,27 +155,27 @@ export default function LiveNewsPage() {
             <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white">
               LIVE <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-500">NEWS</span>
             </h1>
-            <p className="text-gray-400 text-sm sm:text-base mt-1.5">
+            <p className="text-gray-400 text-xs sm:text-base mt-1.5">
               Stay updated with the latest headlines from around the world.
             </p>
           </div>
 
           {/* Refresh and Timestamp Controls */}
-          <div className="flex flex-wrap items-center gap-4 bg-white/5 border border-white/10 px-4 py-2.5 rounded-2xl backdrop-blur-md">
+          <div className="flex flex-wrap items-center justify-between sm:justify-start gap-3 sm:gap-4 bg-white/5 border border-white/10 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-2xl backdrop-blur-md">
             <div className="flex items-center gap-2 text-xs text-gray-400">
               <Clock className="w-3.5 h-3.5 text-cyan-400" />
               <span>
-                Last updated: <span className="text-white font-mono font-bold">{formatTime(lastUpdated)}</span>
+                Updated: <span className="text-white font-mono font-bold">{formatTime(lastUpdated)}</span>
               </span>
             </div>
 
             <button
               onClick={() => loadLiveNews(true)}
               disabled={refreshing || loading}
-              className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-400/40 text-xs font-bold transition-all cursor-pointer disabled:opacity-50 hover:scale-105 active:scale-95"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-400/40 text-xs font-bold transition-all cursor-pointer disabled:opacity-50 hover:scale-105 active:scale-95 ml-auto sm:ml-0"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${refreshing ? 'animate-spin' : ''}`} />
-              <span>{refreshing ? 'Updating...' : 'Refresh News'}</span>
+              <span>{refreshing ? 'Updating...' : 'Refresh'}</span>
             </button>
           </div>
         </div>
@@ -206,7 +207,7 @@ export default function LiveNewsPage() {
           </div>
 
           {/* Category Filter Pills */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-white/10">
+          <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none no-scrollbar flex-nowrap">
             {CATEGORIES.map((cat) => {
               const isActive = selectedCategory === cat.id;
               return (
@@ -215,7 +216,7 @@ export default function LiveNewsPage() {
                   onClick={() => {
                     setSelectedCategory(cat.id);
                   }}
-                  className={`px-4 py-2 rounded-xl text-xs font-bold tracking-wider uppercase transition-all whitespace-nowrap cursor-pointer flex items-center gap-1.5 ${
+                  className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold tracking-wider uppercase transition-all whitespace-nowrap cursor-pointer flex items-center gap-1.5 flex-shrink-0 ${
                     isActive
                       ? 'bg-gradient-to-r from-cyan-500 via-purple-600 to-pink-500 text-white shadow-[0_0_16px_rgba(6,182,212,0.4)] scale-105'
                       : 'bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 border border-white/10'
@@ -299,8 +300,9 @@ export default function LiveNewsPage() {
                       <span className="font-bold text-gray-300 truncate max-w-[160px]">
                         {art.source_name || 'News Wire'}
                       </span>
-                      <span className="text-[11px] text-gray-500">
-                        {formatDate(art.published_at)}
+                      <span className="text-[11px] text-cyan-400/90 font-medium flex items-center gap-1 bg-cyan-950/40 px-2 py-0.5 rounded-md border border-cyan-500/20">
+                        <Clock className="w-3 h-3 text-cyan-400" />
+                        {formatDynamicTime(art.published_at, idx * 5)}
                       </span>
                     </div>
 
@@ -336,10 +338,10 @@ export default function LiveNewsPage() {
                     {/* Analyze with TruthLens CTA */}
                     <button
                       onClick={() => handleAnalyzeArticle(art)}
-                      className="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 via-purple-600 to-pink-500 hover:opacity-95 text-white text-xs font-black uppercase tracking-wider shadow-[0_0_15px_rgba(6,182,212,0.3)] flex items-center gap-1.5 cursor-pointer hover:scale-105 active:scale-95 transition-all"
+                      className="px-3 sm:px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 via-purple-600 to-pink-500 hover:opacity-95 text-white text-[11px] sm:text-xs font-black uppercase tracking-wider shadow-[0_0_15px_rgba(6,182,212,0.3)] flex items-center gap-1.5 cursor-pointer hover:scale-105 active:scale-95 transition-all flex-shrink-0"
                     >
                       <Sparkles className="w-3.5 h-3.5" />
-                      <span>Analyze with TruthLens</span>
+                      <span><span className="hidden xs:inline">Analyze with </span>TruthLens</span>
                     </button>
                   </div>
                 </motion.article>

@@ -28,6 +28,14 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         logger.error(f"Database connection/initialization error: {e}")
         
+    # Preload ML models into memory at startup
+    try:
+        from app.services.prediction_service import prediction_service
+        prediction_service._load_artifacts()
+        logger.info("ML Model artifacts successfully preloaded into memory.")
+    except Exception as e:
+        logger.warning(f"ML Model preload warning: {e}")
+
     yield
     logger.info("Shutting down TruthLens API.")
 

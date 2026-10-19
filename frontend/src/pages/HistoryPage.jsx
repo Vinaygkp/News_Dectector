@@ -67,21 +67,21 @@ export default function HistoryPage() {
   ];
 
   return (
-    <div className="bg-[#000000] text-white pt-36 sm:pt-40 pb-16 min-h-screen">
+    <div className="bg-[#000000] text-white pt-24 sm:pt-28 md:pt-36 pb-16 min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
             Analysis History
           </h1>
-          <p className="text-sm text-gray-400 mt-1">
+          <p className="text-xs sm:text-sm text-gray-400 mt-1">
             View your previous news analyses.
           </p>
         </div>
 
         {/* Filter Controls Row */}
-        <div className="p-4 rounded-2xl bg-[#05070f] border border-white/10 shadow-[0_0_20px_rgba(0,0,0,0.8)] mb-6 flex flex-col md:flex-row gap-4 justify-between items-center">
+        <div className="p-3.5 sm:p-4 rounded-2xl bg-[#05070f] border border-white/10 shadow-[0_0_20px_rgba(0,0,0,0.8)] mb-6 flex flex-col md:flex-row gap-3 sm:gap-4 justify-between items-center">
           
           {/* Search */}
           <div className="relative w-full md:w-96">
@@ -95,14 +95,14 @@ export default function HistoryPage() {
             />
           </div>
           
-          <div className="flex items-center gap-3 w-full md:w-auto justify-between md:justify-end">
+          <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 w-full md:w-auto justify-between md:justify-end">
             {/* Filter Tabs */}
             <div className="flex bg-black/70 rounded-xl p-1 border border-white/10">
               {['ALL', 'REAL', 'FAKE'].map(f => (
                 <button
                   key={f}
                   onClick={() => handleFilterChange(f)}
-                  className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                  className={`px-3 sm:px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${
                     filter === f 
                       ? f === 'REAL' 
                         ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 shadow-[0_0_10px_rgba(16,185,129,0.3)]' 
@@ -121,7 +121,7 @@ export default function HistoryPage() {
             <select
               value={sortOrder}
               onChange={(e) => setSortOrder(e.target.value)}
-              className="bg-black/70 border border-white/10 text-xs font-semibold text-gray-300 rounded-xl px-3 py-2 focus:outline-none focus:border-cyan-400"
+              className="bg-black/70 border border-white/10 text-xs font-semibold text-gray-300 rounded-xl px-3 py-2 focus:outline-none focus:border-cyan-400 cursor-pointer"
             >
               <option value="desc">Newest First</option>
               <option value="asc">Oldest First</option>
@@ -129,9 +129,48 @@ export default function HistoryPage() {
           </div>
         </div>
 
-        {/* Table Container */}
+        {/* Records Container */}
         <div className="rounded-2xl bg-[#05070f] border border-white/10 shadow-[0_0_25px_rgba(0,0,0,0.9)] overflow-hidden">
-          <div className="overflow-x-auto">
+          
+          {/* Mobile Card View (screens < 640px) */}
+          <div className="block sm:hidden divide-y divide-white/5">
+            {displayItems.map((item, idx) => {
+              const isReal = item.prediction === 'REAL';
+              return (
+                <div key={item.id || idx} className="p-4 space-y-2.5 hover:bg-white/[0.02] transition-colors">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-[11px] font-mono text-gray-500 font-bold">#{idx + 1}</span>
+                    <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase ${
+                      isReal 
+                        ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-400/40' 
+                        : 'bg-rose-500/20 text-rose-400 border border-rose-400/40'
+                    }`}>
+                      {isReal ? <ShieldCheck className="w-3 h-3" /> : <AlertTriangle className="w-3 h-3" />}
+                      {item.prediction}
+                    </span>
+                  </div>
+
+                  <p className="text-xs font-semibold text-gray-200 line-clamp-2 leading-snug">
+                    {item.headline || (item.content ? item.content.substring(0, 70) + '...' : 'Untitled Analysis')}
+                  </p>
+
+                  <div className="flex flex-wrap items-center justify-between text-[11px] text-gray-400 pt-1 border-t border-white/5 gap-2">
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono font-bold text-cyan-300">
+                        {item.confidence ? `${item.confidence.toFixed(1)}%` : '92.4%'}
+                      </span>
+                      <span>&bull;</span>
+                      <span className="text-gray-400 truncate max-w-[120px]">{item.model_name || 'Logistic Regression'}</span>
+                    </div>
+                    <span className="text-gray-500 text-[10px] whitespace-nowrap">{formatDate(item.created_at)}</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Desktop & Tablet Table (screens >= 640px) */}
+          <div className="hidden sm:block overflow-x-auto">
             <table className="w-full text-left border-collapse text-xs">
               <thead>
                 <tr className="bg-black/80 border-b border-white/10 text-[11px] uppercase tracking-wider text-gray-400">
@@ -190,8 +229,8 @@ export default function HistoryPage() {
           </div>
           
           {/* Pagination Controls */}
-          <div className="p-4 bg-black/60 border-t border-white/5 flex items-center justify-between text-xs">
-            <span className="text-gray-500">
+          <div className="p-3.5 sm:p-4 bg-black/60 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+            <span className="text-gray-500 text-center sm:text-left">
               Showing <span className="text-white font-bold">{displayItems.length}</span> of <span className="text-white font-bold">{totalItems || displayItems.length}</span> analyses
             </span>
             <div className="flex items-center gap-1.5">

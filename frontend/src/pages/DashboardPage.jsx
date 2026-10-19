@@ -135,16 +135,16 @@ export default function DashboardPage() {
   const isReal = (activePrediction?.prediction || 'REAL').toUpperCase() === 'REAL';
 
   return (
-    <div className="bg-[#000000] text-white pt-24 pb-20 min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+    <div className="bg-[#000000] text-white pt-24 sm:pt-28 md:pt-36 pb-16 sm:pb-20 min-h-screen">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 sm:space-y-10">
         
         {/* ================= TOP HEADER & STEP NAVIGATION ================= */}
         <div className="space-y-4 pb-6 border-b border-white/10">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <Link
                 to="/analyzer"
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-cyan-950/60 hover:bg-cyan-900/60 text-xs font-bold text-cyan-300 border border-cyan-500/40 transition-all shadow-[0_0_12px_rgba(6,182,212,0.2)]"
+                className="inline-flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 rounded-xl bg-cyan-950/60 hover:bg-cyan-900/60 text-xs font-bold text-cyan-300 border border-cyan-500/40 transition-all shadow-[0_0_12px_rgba(6,182,212,0.2)]"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 <span>← Step 2: Analyze Another Article</span>
@@ -152,30 +152,30 @@ export default function DashboardPage() {
 
               <Link
                 to="/"
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-bold text-gray-400 hover:text-white border border-white/10 transition-all"
+                className="inline-flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-bold text-gray-400 hover:text-white border border-white/10 transition-all"
               >
                 <span>Step 1: Home</span>
               </Link>
             </div>
 
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-pink-950/60 border border-pink-500/40 text-pink-300 text-xs font-bold uppercase shadow-[0_0_12px_rgba(236,72,153,0.3)]">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-pink-950/60 border border-pink-500/40 text-pink-300 text-[11px] sm:text-xs font-bold uppercase shadow-[0_0_12px_rgba(236,72,153,0.3)]">
               <span>STEP 3 OF 3: VERIFICATION DASHBOARD</span>
             </div>
           </div>
 
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-              <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+              <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight">
                 News Analysis Dashboard
               </h1>
-              <p className="text-sm text-gray-400 mt-1">
+              <p className="text-xs sm:text-sm text-gray-400 mt-1">
                 Full NLP prediction report, model confidence metrics, and real-time database telemetry.
               </p>
             </div>
 
             <Link
               to="/analyzer"
-              className="px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-purple-600 hover:opacity-95 text-white text-xs font-black tracking-wide transition-all flex items-center gap-2 shadow-[0_0_20px_rgba(6,182,212,0.35)]"
+              className="w-full sm:w-auto px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-purple-600 hover:opacity-95 text-white text-xs font-black tracking-wide transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(6,182,212,0.35)]"
             >
               <RotateCcw className="w-4 h-4" />
               <span>Analyze New Content</span>
@@ -191,29 +191,29 @@ export default function DashboardPage() {
             className="rounded-3xl bg-[#05070f] border-2 border-white/10 shadow-[0_0_40px_rgba(0,0,0,0.9)] overflow-hidden"
           >
             {/* Top Result Banner */}
-            <div className={`p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 border-b border-white/10 relative ${
+            <div className={`p-5 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 border-b border-white/10 relative ${
               isReal
                 ? 'bg-gradient-to-r from-emerald-950/80 via-teal-950/50 to-black'
                 : 'bg-gradient-to-r from-rose-950/90 via-red-950/50 to-black'
             }`}>
-              <div className="flex items-center gap-5 z-10">
-                <div className={`w-16 h-16 rounded-2xl flex items-center justify-center border-2 ${
+              <div className="flex flex-col xs:flex-row items-center xs:items-start sm:items-center text-center xs:text-left gap-4 sm:gap-5 z-10 w-full sm:w-auto">
+                <div className={`w-14 sm:w-16 h-14 sm:h-16 rounded-2xl flex items-center justify-center border-2 flex-shrink-0 ${
                   isReal
                     ? 'bg-emerald-500/20 border-emerald-400 text-emerald-400 shadow-[0_0_25px_#10b981]'
                     : 'bg-rose-500/20 border-rose-400 text-rose-400 shadow-[0_0_25px_#f43f5e]'
                 }`}>
                   {isReal ? (
-                    <ShieldCheck className="w-9 h-9 stroke-[2.5]" />
+                    <ShieldCheck className="w-8 sm:w-9 h-8 sm:h-9 stroke-[2.5]" />
                   ) : (
-                    <AlertTriangle className="w-9 h-9 stroke-[2.5]" />
+                    <AlertTriangle className="w-8 sm:w-9 h-8 sm:h-9 stroke-[2.5]" />
                   )}
                 </div>
 
                 <div>
-                  <div className="text-xs font-black tracking-widest uppercase text-gray-400 mb-1">
+                  <div className="text-[10px] sm:text-xs font-black tracking-widest uppercase text-gray-400 mb-1">
                     LATEST CLASSIFICATION RESULT
                   </div>
-                  <h2 className={`text-4xl sm:text-5xl font-black tracking-tight ${
+                  <h2 className={`text-3xl sm:text-5xl font-black tracking-tight ${
                     isReal
                       ? 'text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 via-teal-200 to-cyan-300 drop-shadow-[0_0_20px_rgba(16,185,129,0.6)]'
                       : 'text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-red-400 to-amber-400 drop-shadow-[0_0_20px_rgba(244,63,94,0.6)]'
@@ -227,7 +227,7 @@ export default function DashboardPage() {
               </div>
 
               {/* Confidence Meter Widget */}
-              <div className="flex-shrink-0 z-10 p-3 rounded-2xl bg-black/70 border border-white/10 text-center">
+              <div className="flex-shrink-0 z-10 p-3 rounded-2xl bg-black/70 border border-white/10 text-center w-full xs:w-auto flex justify-center">
                 <ConfidenceMeter 
                   confidence={activePrediction.confidence || (isReal ? 98.42 : 93.40)} 
                   prediction={activePrediction.prediction} 
@@ -322,10 +322,10 @@ export default function DashboardPage() {
         </section>
 
         {/* ================= 3. MIDDLE ROW: 3 INTERACTIVE CHARTS ================= */}
-        <section className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6">
           
           {/* Chart 1: Real vs Fake Donut */}
-          <div className="lg:col-span-4 p-6 rounded-2xl bg-[#05070f] border border-white/10 shadow-[0_0_20px_rgba(0,0,0,0.8)] flex flex-col justify-between">
+          <div className="md:col-span-1 lg:col-span-4 p-5 sm:p-6 rounded-2xl bg-[#05070f] border border-white/10 shadow-[0_0_20px_rgba(0,0,0,0.8)] flex flex-col justify-between">
             <h3 className="text-xs font-bold text-gray-300 uppercase tracking-wider mb-2">
               Real vs Fake Distribution
             </h3>
@@ -365,7 +365,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Chart 2: Analysis Activity Area Chart */}
-          <div className="lg:col-span-5 p-6 rounded-2xl bg-[#05070f] border border-white/10 shadow-[0_0_20px_rgba(0,0,0,0.8)] flex flex-col justify-between">
+          <div className="md:col-span-1 lg:col-span-5 p-5 sm:p-6 rounded-2xl bg-[#05070f] border border-white/10 shadow-[0_0_20px_rgba(0,0,0,0.8)] flex flex-col justify-between">
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-xs font-bold text-gray-300 uppercase tracking-wider">Analysis Activity Over Time</h3>
               <div className="flex items-center gap-3 text-[11px] font-semibold">
@@ -398,7 +398,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Chart 3: Confidence Distribution */}
-          <div className="lg:col-span-3 p-6 rounded-2xl bg-[#05070f] border border-white/10 shadow-[0_0_20px_rgba(0,0,0,0.8)] flex flex-col justify-between">
+          <div className="md:col-span-2 lg:col-span-3 p-5 sm:p-6 rounded-2xl bg-[#05070f] border border-white/10 shadow-[0_0_20px_rgba(0,0,0,0.8)] flex flex-col justify-between">
             <h3 className="text-xs font-bold text-gray-300 uppercase tracking-wider mb-2">
               Confidence Distribution
             </h3>
@@ -497,7 +497,7 @@ export default function DashboardPage() {
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs border-collapse">
+            <table className="w-full min-w-[620px] text-left text-xs border-collapse">
               <thead>
                 <tr className="bg-black/60 border-b border-white/10 text-[11px] uppercase tracking-wider text-gray-400">
                   <th className="px-4 py-3 font-bold">Headline</th>

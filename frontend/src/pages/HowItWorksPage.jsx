@@ -3,76 +3,89 @@ import { Database, BrainCircuit, Activity, AlertTriangle, ArrowRight, ArrowDown,
 
 export default function HowItWorksPage() {
   return (
-    <div className="bg-[#000000] text-white pt-36 sm:pt-40 pb-20 min-h-screen">
+    <div className="bg-[#000000] text-white pt-24 sm:pt-28 md:pt-36 pb-16 sm:pb-20 min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header */}
-        <div className="mb-12 text-center md:text-left">
-          <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+        <div className="mb-8 sm:mb-12 text-center md:text-left">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight">
             How TruthLens Works
           </h1>
-          <p className="text-sm sm:text-base text-gray-400 mt-2">
+          <p className="text-xs sm:text-base text-gray-400 mt-2">
             From raw news to intelligent analysis in a few simple steps.
           </p>
         </div>
 
         {/* ================= 1. ML TRAINING ARCHITECTURE PIPELINE ================= */}
-        <section className="mb-14">
+        <section className="mb-10 sm:mb-14">
           <div className="flex items-center gap-2 mb-4">
             <span className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_8px_#06b6d4]" />
-            <h2 className="text-sm font-bold uppercase tracking-widest text-cyan-300">
+            <h2 className="text-xs sm:text-sm font-bold uppercase tracking-widest text-cyan-300">
               1. Training Pipeline & Model Serialization
             </h2>
           </div>
 
-          <div className="p-6 sm:p-8 rounded-3xl bg-[#05070f] border border-white/10 shadow-[0_0_30px_rgba(0,0,0,0.9)] overflow-x-auto">
-            <div className="flex flex-col lg:flex-row items-center justify-between gap-4 min-w-[750px]">
+          <div className="p-4 sm:p-8 rounded-2xl sm:rounded-3xl bg-[#05070f] border border-white/10 shadow-[0_0_30px_rgba(0,0,0,0.9)]">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
               
               {/* Step 1 */}
-              <div className="flex-1 p-4 rounded-2xl bg-black/80 border border-cyan-500/30 text-center w-full">
-                <Database className="w-6 h-6 text-cyan-400 mx-auto mb-2" />
-                <div className="text-xs font-bold text-white">Dataset</div>
-                <div className="text-[10px] text-gray-400 mt-0.5">(Fake + True CSV)</div>
+              <div className="p-3.5 sm:p-4 rounded-2xl bg-black/80 border border-cyan-500/30 text-center flex flex-col justify-between space-y-2">
+                <span className="text-[10px] font-mono font-bold text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded-full w-fit mx-auto">01</span>
+                <div>
+                  <Database className="w-5 h-5 sm:w-6 sm:h-6 text-cyan-400 mx-auto mb-1.5" />
+                  <div className="text-xs font-bold text-white">Dataset</div>
+                  <div className="text-[10px] text-gray-400 mt-0.5">(Fake + True CSV)</div>
+                </div>
               </div>
-              <ArrowRight className="w-5 h-5 text-cyan-400 flex-shrink-0 hidden lg:block" />
 
               {/* Step 2 */}
-              <div className="flex-1 p-4 rounded-2xl bg-black/80 border border-teal-500/30 text-center w-full">
-                <Database className="w-6 h-6 text-teal-400 mx-auto mb-2" />
-                <div className="text-xs font-bold text-white">PostgreSQL</div>
-                <div className="text-[10px] text-gray-400 mt-0.5">(Database Table)</div>
+              <div className="p-3.5 sm:p-4 rounded-2xl bg-black/80 border border-teal-500/30 text-center flex flex-col justify-between space-y-2">
+                <span className="text-[10px] font-mono font-bold text-teal-400 bg-teal-500/10 px-2 py-0.5 rounded-full w-fit mx-auto">02</span>
+                <div>
+                  <Database className="w-5 h-5 sm:w-6 sm:h-6 text-teal-400 mx-auto mb-1.5" />
+                  <div className="text-xs font-bold text-white">PostgreSQL</div>
+                  <div className="text-[10px] text-gray-400 mt-0.5">(Database Table)</div>
+                </div>
               </div>
-              <ArrowRight className="w-5 h-5 text-teal-400 flex-shrink-0 hidden lg:block" />
 
               {/* Step 3 */}
-              <div className="flex-1 p-4 rounded-2xl bg-black/80 border border-purple-500/30 text-center w-full">
-                <BrainCircuit className="w-6 h-6 text-purple-400 mx-auto mb-2" />
-                <div className="text-xs font-bold text-white">Preprocessing</div>
-                <div className="text-[10px] text-gray-400 mt-0.5">(Text Cleaning)</div>
+              <div className="p-3.5 sm:p-4 rounded-2xl bg-black/80 border border-purple-500/30 text-center flex flex-col justify-between space-y-2">
+                <span className="text-[10px] font-mono font-bold text-purple-400 bg-purple-500/10 px-2 py-0.5 rounded-full w-fit mx-auto">03</span>
+                <div>
+                  <BrainCircuit className="w-5 h-5 sm:w-6 sm:h-6 text-purple-400 mx-auto mb-1.5" />
+                  <div className="text-xs font-bold text-white">Preprocessing</div>
+                  <div className="text-[10px] text-gray-400 mt-0.5">(Text Cleaning)</div>
+                </div>
               </div>
-              <ArrowRight className="w-5 h-5 text-purple-400 flex-shrink-0 hidden lg:block" />
 
               {/* Step 4 */}
-              <div className="flex-1 p-4 rounded-2xl bg-black/80 border border-pink-500/30 text-center w-full">
-                <FileText className="w-6 h-6 text-pink-400 mx-auto mb-2" />
-                <div className="text-xs font-bold text-white">TF-IDF</div>
-                <div className="text-[10px] text-gray-400 mt-0.5">(Vectorization)</div>
+              <div className="p-3.5 sm:p-4 rounded-2xl bg-black/80 border border-pink-500/30 text-center flex flex-col justify-between space-y-2">
+                <span className="text-[10px] font-mono font-bold text-pink-400 bg-pink-500/10 px-2 py-0.5 rounded-full w-fit mx-auto">04</span>
+                <div>
+                  <FileText className="w-5 h-5 sm:w-6 sm:h-6 text-pink-400 mx-auto mb-1.5" />
+                  <div className="text-xs font-bold text-white">TF-IDF</div>
+                  <div className="text-[10px] text-gray-400 mt-0.5">(Vectorization)</div>
+                </div>
               </div>
-              <ArrowRight className="w-5 h-5 text-pink-400 flex-shrink-0 hidden lg:block" />
 
               {/* Step 5 */}
-              <div className="flex-1 p-4 rounded-2xl bg-black/80 border border-amber-500/30 text-center w-full">
-                <Cpu className="w-6 h-6 text-amber-400 mx-auto mb-2" />
-                <div className="text-xs font-bold text-white">ML Training</div>
-                <div className="text-[10px] text-gray-400 mt-0.5">(4 Classifiers)</div>
+              <div className="p-3.5 sm:p-4 rounded-2xl bg-black/80 border border-amber-500/30 text-center flex flex-col justify-between space-y-2">
+                <span className="text-[10px] font-mono font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full w-fit mx-auto">05</span>
+                <div>
+                  <Cpu className="w-5 h-5 sm:w-6 sm:h-6 text-amber-400 mx-auto mb-1.5" />
+                  <div className="text-xs font-bold text-white">ML Training</div>
+                  <div className="text-[10px] text-gray-400 mt-0.5">(4 Classifiers)</div>
+                </div>
               </div>
-              <ArrowRight className="w-5 h-5 text-amber-400 flex-shrink-0 hidden lg:block" />
 
               {/* Step 6 */}
-              <div className="flex-1 p-4 rounded-2xl bg-black/80 border border-emerald-500/40 text-center w-full shadow-[0_0_15px_rgba(16,185,129,0.25)]">
-                <CheckCircle2 className="w-6 h-6 text-emerald-400 mx-auto mb-2" />
-                <div className="text-xs font-bold text-white">Saved Model</div>
-                <div className="text-[10px] text-emerald-400 mt-0.5">& Vectorizer.pkl</div>
+              <div className="p-3.5 sm:p-4 rounded-2xl bg-black/80 border border-emerald-500/40 text-center shadow-[0_0_15px_rgba(16,185,129,0.25)] flex flex-col justify-between space-y-2">
+                <span className="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full w-fit mx-auto">06</span>
+                <div>
+                  <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-400 mx-auto mb-1.5" />
+                  <div className="text-xs font-bold text-white">Saved Model</div>
+                  <div className="text-[10px] text-emerald-400 mt-0.5">& Vectorizer.pkl</div>
+                </div>
               </div>
 
             </div>
@@ -80,49 +93,60 @@ export default function HowItWorksPage() {
         </section>
 
         {/* ================= 2. LIVE INFERENCE FLOW ================= */}
-        <section className="mb-14">
+        <section className="mb-10 sm:mb-14">
           <div className="flex items-center gap-2 mb-4">
             <span className="w-2 h-2 rounded-full bg-pink-400 shadow-[0_0_8px_#ec4899]" />
-            <h2 className="text-sm font-bold uppercase tracking-widest text-pink-300">
+            <h2 className="text-xs sm:text-sm font-bold uppercase tracking-widest text-pink-300">
               2. Live Prediction & Telemetry Flow
             </h2>
           </div>
 
-          <div className="p-6 sm:p-8 rounded-3xl bg-[#05070f] border border-white/10 shadow-[0_0_30px_rgba(0,0,0,0.9)] overflow-x-auto">
-            <div className="flex flex-col lg:flex-row items-center justify-between gap-4 min-w-[700px]">
+          <div className="p-4 sm:p-8 rounded-2xl sm:rounded-3xl bg-[#05070f] border border-white/10 shadow-[0_0_30px_rgba(0,0,0,0.9)]">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
               
-              <div className="flex-1 p-4 rounded-2xl bg-black/80 border border-cyan-500/30 text-center w-full">
-                <FileText className="w-6 h-6 text-cyan-400 mx-auto mb-2" />
-                <div className="text-xs font-bold text-white">User Input</div>
-                <div className="text-[10px] text-gray-400 mt-0.5">(Headline + Text)</div>
+              <div className="p-3.5 sm:p-4 rounded-2xl bg-black/80 border border-cyan-500/30 text-center flex flex-col justify-between space-y-2">
+                <span className="text-[10px] font-mono font-bold text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded-full w-fit mx-auto">01</span>
+                <div>
+                  <FileText className="w-5 h-5 sm:w-6 sm:h-6 text-cyan-400 mx-auto mb-1.5" />
+                  <div className="text-xs font-bold text-white">User Input</div>
+                  <div className="text-[10px] text-gray-400 mt-0.5">(Headline + Text)</div>
+                </div>
               </div>
-              <ArrowRight className="w-5 h-5 text-cyan-400 flex-shrink-0 hidden lg:block" />
 
-              <div className="flex-1 p-4 rounded-2xl bg-black/80 border border-purple-500/30 text-center w-full">
-                <Server className="w-6 h-6 text-purple-400 mx-auto mb-2" />
-                <div className="text-xs font-bold text-white">FastAPI</div>
-                <div className="text-[10px] text-gray-400 mt-0.5">(NLP Service)</div>
+              <div className="p-3.5 sm:p-4 rounded-2xl bg-black/80 border border-purple-500/30 text-center flex flex-col justify-between space-y-2">
+                <span className="text-[10px] font-mono font-bold text-purple-400 bg-purple-500/10 px-2 py-0.5 rounded-full w-fit mx-auto">02</span>
+                <div>
+                  <Server className="w-5 h-5 sm:w-6 sm:h-6 text-purple-400 mx-auto mb-1.5" />
+                  <div className="text-xs font-bold text-white">FastAPI</div>
+                  <div className="text-[10px] text-gray-400 mt-0.5">(NLP Service)</div>
+                </div>
               </div>
-              <ArrowRight className="w-5 h-5 text-purple-400 flex-shrink-0 hidden lg:block" />
 
-              <div className="flex-1 p-4 rounded-2xl bg-black/80 border border-pink-500/30 text-center w-full">
-                <Activity className="w-6 h-6 text-pink-400 mx-auto mb-2" />
-                <div className="text-xs font-bold text-white">Prediction</div>
-                <div className="text-[10px] text-pink-300 mt-0.5">(REAL / FAKE)</div>
+              <div className="p-3.5 sm:p-4 rounded-2xl bg-black/80 border border-pink-500/30 text-center flex flex-col justify-between space-y-2">
+                <span className="text-[10px] font-mono font-bold text-pink-400 bg-pink-500/10 px-2 py-0.5 rounded-full w-fit mx-auto">03</span>
+                <div>
+                  <Activity className="w-5 h-5 sm:w-6 sm:h-6 text-pink-400 mx-auto mb-1.5" />
+                  <div className="text-xs font-bold text-white">Prediction</div>
+                  <div className="text-[10px] text-pink-300 mt-0.5">(REAL / FAKE)</div>
+                </div>
               </div>
-              <ArrowRight className="w-5 h-5 text-pink-400 flex-shrink-0 hidden lg:block" />
 
-              <div className="flex-1 p-4 rounded-2xl bg-black/80 border border-teal-500/30 text-center w-full">
-                <Database className="w-6 h-6 text-teal-400 mx-auto mb-2" />
-                <div className="text-xs font-bold text-white">PostgreSQL</div>
-                <div className="text-[10px] text-gray-400 mt-0.5">(Predictions Log)</div>
+              <div className="p-3.5 sm:p-4 rounded-2xl bg-black/80 border border-teal-500/30 text-center flex flex-col justify-between space-y-2">
+                <span className="text-[10px] font-mono font-bold text-teal-400 bg-teal-500/10 px-2 py-0.5 rounded-full w-fit mx-auto">04</span>
+                <div>
+                  <Database className="w-5 h-5 sm:w-6 sm:h-6 text-teal-400 mx-auto mb-1.5" />
+                  <div className="text-xs font-bold text-white">PostgreSQL</div>
+                  <div className="text-[10px] text-gray-400 mt-0.5">(Predictions Log)</div>
+                </div>
               </div>
-              <ArrowRight className="w-5 h-5 text-teal-400 flex-shrink-0 hidden lg:block" />
 
-              <div className="flex-1 p-4 rounded-2xl bg-black/80 border border-emerald-500/40 text-center w-full shadow-[0_0_15px_rgba(16,185,129,0.25)]">
-                <Activity className="w-6 h-6 text-emerald-400 mx-auto mb-2" />
-                <div className="text-xs font-bold text-white">Dashboard</div>
-                <div className="text-[10px] text-emerald-400 mt-0.5">(Real-time Charts)</div>
+              <div className="p-3.5 sm:p-4 rounded-2xl bg-black/80 border border-emerald-500/40 text-center shadow-[0_0_15px_rgba(16,185,129,0.25)] flex flex-col justify-between space-y-2 sm:col-span-2 lg:col-span-1">
+                <span className="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full w-fit mx-auto">05</span>
+                <div>
+                  <Activity className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-400 mx-auto mb-1.5" />
+                  <div className="text-xs font-bold text-white">Dashboard</div>
+                  <div className="text-[10px] text-emerald-400 mt-0.5">(Real-time Charts)</div>
+                </div>
               </div>
 
             </div>
@@ -130,10 +154,10 @@ export default function HowItWorksPage() {
         </section>
 
         {/* ================= 3. DATABASE ARCHITECTURE (ITEM 9 IN DESIGN SHEET) ================= */}
-        <section className="mb-14">
+        <section className="mb-10 sm:mb-14">
           <div className="flex items-center gap-2 mb-4">
             <span className="w-2 h-2 rounded-full bg-blue-400 shadow-[0_0_8px_#3b82f6]" />
-            <h2 className="text-sm font-bold uppercase tracking-widest text-blue-300">
+            <h2 className="text-xs sm:text-sm font-bold uppercase tracking-widest text-blue-300">
               3. PostgreSQL Database Architecture
             </h2>
           </div>

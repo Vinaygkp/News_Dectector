@@ -9,6 +9,7 @@ import {
   Layers, Check, BarChart3, Activity, Award, ShieldAlert, CheckCircle2
 } from 'lucide-react';
 import { useApi } from '../hooks/useApi';
+import { formatDynamicTime, getArticleTimestamp } from '../utils/dateUtils';
 
 const topicImages = {
   climate: [
@@ -773,6 +774,7 @@ export default function HomePage() {
   const [heroIndex, setHeroIndex] = useState(0);
   const [featuredSlideIndex, setFeaturedSlideIndex] = useState(0);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState(new Date());
 
   // Load real-time live headlines from backend GNews service
   const loadLiveFeed = async (cat = undefined) => {
@@ -783,6 +785,7 @@ export default function HomePage() {
         const mapped = res.data.articles.map((art, i) => {
           const catUpper = (art.category || 'WORLD').toUpperCase();
           const safeImage = resolveNewsImage(art.image_url, catUpper, art.title, i);
+          const articleTimestamp = getArticleTimestamp(art.published_at, i * 6);
 
           return {
             id: art.url || `api-${i}`,
@@ -794,7 +797,9 @@ export default function HomePage() {
             fullContent: art.content || art.description || art.title,
             image: safeImage,
             author: art.author || art.source_name || 'Staff Reporter',
-            date: art.published_at ? new Date(art.published_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Today',
+            published_at: art.published_at,
+            timestamp: articleTimestamp,
+            date: formatDynamicTime(art.published_at, i * 6),
             views: 1200 + (i * 85),
             readTime: '3 min read',
             highlights: [
@@ -805,6 +810,7 @@ export default function HomePage() {
           };
         });
         setApiArticles(mapped);
+        setLastUpdated(new Date());
       }
     } catch (e) {
       console.warn('Live news fetch fallback:', e);
@@ -815,13 +821,27 @@ export default function HomePage() {
 
   useEffect(() => {
     loadLiveFeed();
-    const timer = setInterval(() => loadLiveFeed(), 120000);
+    // Auto-refresh every 60 seconds to keep headlines updated day-by-day and time-to-time
+    const timer = setInterval(() => loadLiveFeed(), 60000);
     return () => clearInterval(timer);
   }, []);
 
-  // Combined pool: live news prioritised first, deduplicated by title
+  // Dynamically attach live relative timestamps to base news so they represent fresh updates
+  const formattedBaseNews = useMemo(() => {
+    return baseNewsCorpus.map((art, idx) => {
+      const minutesAgo = 18 + (idx * 25);
+      const articleTimestamp = Date.now() - (minutesAgo * 60 * 1000);
+      return {
+        ...art,
+        timestamp: articleTimestamp,
+        date: formatDynamicTime(articleTimestamp, minutesAgo)
+      };
+    });
+  }, [lastUpdated]);
+
+  // Combined pool: live news prioritised first, deduplicated by title, sorted newest first
   const allArticles = useMemo(() => {
-    const combined = [...apiArticles, ...baseNewsCorpus];
+    const combined = [...apiArticles, ...formattedBaseNews];
     const seen = new Set();
     const unique = [];
     for (const art of combined) {
@@ -831,8 +851,10 @@ export default function HomePage() {
         unique.push(art);
       }
     }
-    return unique.length > 0 ? unique : baseNewsCorpus;
-  }, [apiArticles]);
+    // Sort strictly by newest publication timestamp descending
+    unique.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+    return unique.length > 0 ? unique : formattedBaseNews;
+  }, [apiArticles, formattedBaseNews]);
 
   // Robust category matcher function
   const matchesCategory = (art, targetCat) => {
@@ -978,11 +1000,11 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-black text-gray-900 dark:text-gray-100 font-sans transition-colors duration-300 pt-28">
+    <div className="min-h-screen bg-white dark:bg-black text-gray-900 dark:text-gray-100 font-sans transition-colors duration-300 pt-20 sm:pt-24 lg:pt-28">
       
       {/* ================= 1. MASSIVE CINEMATIC HERO STORY WITH DYNAMIC INSET CARDS ================= */}
       <section className="relative bg-black overflow-hidden border-b border-gray-200 dark:border-white/10">
-        <div className="relative min-h-[520px] lg:min-h-[600px] w-full flex items-end">
+        <div className="relative min-h-[460px] sm:min-h-[520px] lg:min-h-[600px] w-full flex items-end">
           
           {/* Animated Background Image with Crossfade Transition */}
           <AnimatePresence mode="wait">
@@ -1005,20 +1027,20 @@ export default function HomePage() {
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/55 to-black/30" />
 
           {/* Hero Content Container */}
-          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 w-full">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-end">
               
               {/* Left Column: Big Bold Headline & Metadata */}
-              <div className="lg:col-span-7 space-y-4 text-white">
-                <div className="flex items-center gap-3">
-                  <span className="px-3 py-1 bg-red-600 text-white text-xs font-black uppercase tracking-wider rounded shadow-sm">
+              <div className="lg:col-span-7 space-y-3 sm:space-y-4 text-white">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                  <span className="px-2.5 sm:px-3 py-0.5 sm:py-1 bg-red-600 text-white text-[11px] sm:text-xs font-black uppercase tracking-wider rounded shadow-sm">
                     {heroStory.category}
                   </span>
-                  <span className="text-xs text-gray-300 flex items-center gap-1 font-medium">
+                  <span className="text-[11px] sm:text-xs text-gray-300 flex items-center gap-1 font-medium">
                     <Clock className="w-3.5 h-3.5 text-red-400" />
                     {heroStory.date}
                   </span>
-                  <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-white/20 backdrop-blur-md text-white font-bold uppercase tracking-wider animate-pulse flex items-center gap-1">
+                  <span className="text-[9px] sm:text-[10px] px-2 sm:px-2.5 py-0.5 rounded-full bg-white/20 backdrop-blur-md text-white font-bold uppercase tracking-wider animate-pulse flex items-center gap-1">
                     <Radio className="w-2.5 h-2.5 text-red-400 fill-red-400" />
                     LIVE HEADLINE
                   </span>
@@ -1026,7 +1048,7 @@ export default function HomePage() {
 
                 <h1 
                   onClick={() => setReadingStory(heroStory)}
-                  className="text-2xl sm:text-3xl lg:text-4xl font-serif font-black leading-tight text-white hover:text-red-400 transition-colors cursor-pointer drop-shadow-md"
+                  className="text-xl sm:text-3xl lg:text-4xl font-serif font-black leading-tight text-white hover:text-red-400 transition-colors cursor-pointer drop-shadow-md"
                 >
                   {heroStory.title}
                 </h1>
@@ -1036,15 +1058,15 @@ export default function HomePage() {
                 </p>
 
                 {/* Author & Stats Row */}
-                <div className="flex flex-wrap items-center gap-4 sm:gap-6 pt-2 text-xs text-gray-300">
+                <div className="flex flex-wrap items-center gap-3 sm:gap-6 pt-1 sm:pt-2 text-[11px] sm:text-xs text-gray-300">
                   <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-full bg-cyan-600 flex items-center justify-center font-bold text-white text-[11px] shadow-sm">
+                    <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-cyan-600 flex items-center justify-center font-bold text-white text-[10px] sm:text-[11px] shadow-sm">
                       {heroStory.author ? heroStory.author.charAt(0) : 'T'}
                     </div>
                     <span>By <strong className="text-white">{heroStory.author}</strong></span>
                   </div>
 
-                  <div className="flex items-center gap-4 text-gray-400">
+                  <div className="flex items-center gap-3 sm:gap-4 text-gray-400">
                     <span className="flex items-center gap-1">
                       <Eye className="w-3.5 h-3.5 text-red-400" />
                       {heroStory.views || 1840} readers
@@ -1057,10 +1079,10 @@ export default function HomePage() {
                 </div>
 
                 {/* Action CTA Buttons */}
-                <div className="flex flex-wrap items-center gap-3 pt-4">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 pt-3 sm:pt-4">
                   <button
                     onClick={() => setReadingStory(heroStory)}
-                    className="px-6 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-black text-xs uppercase tracking-wider flex items-center gap-2 transition-all shadow-lg hover:scale-105 active:scale-95 cursor-pointer"
+                    className="w-full sm:w-auto justify-center px-6 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-black text-xs uppercase tracking-wider flex items-center gap-2 transition-all shadow-lg hover:scale-105 active:scale-95 cursor-pointer"
                   >
                     <span>Read Full Article</span>
                     <ArrowRight className="w-4 h-4" />
@@ -1068,7 +1090,7 @@ export default function HomePage() {
 
                   <button
                     onClick={() => handleAnalyzeArticle(heroStory.title, heroStory.fullContent)}
-                    className="px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 backdrop-blur-md text-white border border-white/20 font-bold text-xs flex items-center gap-2 transition-all hover:scale-105 active:scale-95 cursor-pointer"
+                    className="w-full sm:w-auto justify-center px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 backdrop-blur-md text-white border border-white/20 font-bold text-xs flex items-center gap-2 transition-all hover:scale-105 active:scale-95 cursor-pointer"
                   >
                     <Search className="w-3.5 h-3.5 text-cyan-400" />
                     <span>Fact Check with AI</span>
@@ -1077,22 +1099,32 @@ export default function HomePage() {
               </div>
 
               {/* Right Column: 4 Live Inset Cards (2x2 Grid) */}
-              <div className="lg:col-span-5 bg-black/60 backdrop-blur-md p-4 rounded-2xl border border-white/10 space-y-3">
+              <div className="lg:col-span-5 bg-black/60 backdrop-blur-md p-3.5 sm:p-4 rounded-2xl border border-white/10 space-y-3">
                 <div className="flex items-center justify-between border-b border-white/10 pb-2">
                   <span className="text-xs font-black uppercase text-red-400 flex items-center gap-1.5">
                     <Flame className="w-3.5 h-3.5 fill-red-400" />
                     Latest Broadcasts
                   </span>
-                  <button 
-                    onClick={() => setHeroIndex(prev => (prev + 1) % allArticles.length)}
-                    className="text-[11px] text-gray-400 hover:text-white flex items-center gap-1 cursor-pointer transition-colors"
-                  >
-                    <RefreshCw className={`w-3 h-3 ${isRefreshing ? 'animate-spin' : ''}`} />
-                    Cycle
-                  </button>
+                  <div className="flex items-center gap-3">
+                    <button 
+                      onClick={() => loadLiveFeed()}
+                      disabled={isRefreshing}
+                      className="text-[11px] text-gray-300 hover:text-cyan-300 flex items-center gap-1 cursor-pointer transition-colors"
+                      title="Update news stream right now"
+                    >
+                      <RefreshCw className={`w-3 h-3 ${isRefreshing ? 'animate-spin text-cyan-400' : ''}`} />
+                      <span>{isRefreshing ? 'Updating...' : 'Live Sync'}</span>
+                    </button>
+                    <button 
+                      onClick={() => setHeroIndex(prev => (prev + 1) % allArticles.length)}
+                      className="text-[11px] text-gray-400 hover:text-white flex items-center gap-1 cursor-pointer transition-colors"
+                    >
+                      Cycle
+                    </button>
+                  </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
                   {topLiveInsetCards.map((story, i) => (
                     <div
                       key={story.id || i}
@@ -1129,18 +1161,18 @@ export default function HomePage() {
       </section>
 
       {/* ================= 2. SECTION 1: TRENDING NEWS WITH DYNAMIC CATEGORY FILTERING ================= */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-6">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-6">
         
         {/* Section Header with Category Tabs */}
-        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-gray-200 dark:border-white/10 pb-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 border-b border-gray-200 dark:border-white/10 pb-3">
           <div className="flex items-center gap-4 flex-grow">
-            <h2 className="font-serif font-black text-xl text-gray-900 dark:text-white flex-shrink-0">
+            <h2 className="font-serif font-black text-lg sm:text-xl text-gray-900 dark:text-white flex-shrink-0">
               Trending News
             </h2>
             <div className="h-0.5 bg-red-600 flex-grow max-w-xs" />
           </div>
 
-          <div className="flex items-center gap-2 sm:gap-3 text-xs font-bold">
+          <div className="flex items-center gap-1.5 sm:gap-3 text-xs font-bold overflow-x-auto max-w-full pb-1 scrollbar-none flex-nowrap">
             {[
               { label: 'All', value: 'ALL' },
               { label: 'Travel & World', value: 'WORLD' },
@@ -1153,7 +1185,7 @@ export default function HomePage() {
                 <button
                   key={tab.label}
                   onClick={() => setSelectedTrendingCategory(tab.value)}
-                  className={`transition-all px-3 py-1 rounded-md cursor-pointer ${
+                  className={`transition-all px-3 py-1 rounded-md cursor-pointer flex-shrink-0 whitespace-nowrap ${
                     isActive
                       ? 'bg-red-600 text-white font-black shadow-sm'
                       : 'text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5'
@@ -1163,20 +1195,20 @@ export default function HomePage() {
                 </button>
               );
             })}
-            <span className="px-2 py-0.5 rounded bg-red-100 dark:bg-red-950 text-red-600 dark:text-red-400 text-[10px] uppercase font-bold">
+            <span className="px-2 py-0.5 rounded bg-red-100 dark:bg-red-950 text-red-600 dark:text-red-400 text-[10px] uppercase font-bold flex-shrink-0 whitespace-nowrap">
               Live Feed
             </span>
           </div>
         </div>
 
         {/* Trending 3-Column Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 items-stretch">
           
           {/* Left Column: Big Featured Card */}
           {trendingArticles[0] && (
             <div 
               onClick={() => setReadingStory(trendingArticles[0])}
-              className="lg:col-span-5 relative rounded-2xl overflow-hidden aspect-[4/3] lg:aspect-auto group cursor-pointer border border-gray-200 dark:border-white/10 shadow-sm min-h-[360px]"
+              className="md:col-span-2 lg:col-span-5 relative rounded-2xl overflow-hidden aspect-[16/10] sm:aspect-[4/3] lg:aspect-auto group cursor-pointer border border-gray-200 dark:border-white/10 shadow-sm min-h-[300px] sm:min-h-[360px]"
             >
               <img 
                 src={resolveNewsImage(trendingArticles[0].image, trendingArticles[0].category, trendingArticles[0].title, 0)} 
@@ -1188,7 +1220,7 @@ export default function HomePage() {
                 }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
-              <div className="absolute bottom-0 inset-x-0 p-6 space-y-2 text-white">
+              <div className="absolute bottom-0 inset-x-0 p-5 sm:p-6 space-y-2 text-white">
                 <div className="flex items-center gap-2">
                   <span className="px-2.5 py-0.5 bg-red-600 text-[10px] font-black uppercase rounded shadow-sm">
                     {trendingArticles[0].category}
@@ -1208,17 +1240,17 @@ export default function HomePage() {
           )}
 
           {/* Middle Column: 3 Horizontal Mini-Cards */}
-          <div className="lg:col-span-4 space-y-3 flex flex-col justify-between">
+          <div className="md:col-span-1 lg:col-span-4 space-y-3 flex flex-col justify-between">
             {trendingArticles.slice(1, 4).map((art, idx) => (
               <div 
                 key={art.id || idx}
                 onClick={() => setReadingStory(art)}
-                className="flex items-center gap-4 group cursor-pointer p-3 rounded-2xl hover:bg-gray-50 dark:hover:bg-white/5 transition-all border border-gray-100 dark:border-white/5 hover:border-gray-300 dark:hover:border-white/20 shadow-sm"
+                className="flex items-center gap-3 sm:gap-4 group cursor-pointer p-3 rounded-2xl hover:bg-gray-50 dark:hover:bg-white/5 transition-all border border-gray-100 dark:border-white/5 hover:border-gray-300 dark:hover:border-white/20 shadow-sm"
               >
                 <img 
                   src={resolveNewsImage(art.image, art.category, art.title, idx + 1)} 
                   alt={art.title} 
-                  className="w-24 h-20 rounded-xl object-cover flex-shrink-0 group-hover:scale-105 transition-transform" 
+                  className="w-20 sm:w-24 h-16 sm:h-20 rounded-xl object-cover flex-shrink-0 group-hover:scale-105 transition-transform" 
                   onError={(e) => {
                     e.target.onerror = null;
                     e.target.src = resolveNewsImage(null, art.category, art.title, idx + 1);
@@ -1242,7 +1274,7 @@ export default function HomePage() {
           </div>
 
           {/* Right Column: Stacked Interactive Category Cards with Live Count */}
-          <div className="lg:col-span-3 space-y-2.5 flex flex-col justify-between">
+          <div className="md:col-span-1 lg:col-span-3 space-y-2.5 flex flex-col justify-between">
             {categorySidebarCards.map((cat, idx) => {
               const isSelected = selectedTrendingCategory === cat.key;
               return (
@@ -1286,13 +1318,13 @@ export default function HomePage() {
       </section>
 
       {/* ================= 3. SECTION 2: FEATURED HEADLINES (CLEAN EDITORIAL & AI SPOTLIGHT) ================= */}
-      <section className="bg-gray-50 dark:bg-[#04060d] py-12 border-y border-gray-200 dark:border-white/10 transition-colors">
+      <section className="bg-gray-50 dark:bg-[#04060d] py-8 sm:py-12 border-y border-gray-200 dark:border-white/10 transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
           
           {/* Section Header with Working Carousel Slider Arrows */}
           <div className="flex items-center justify-between border-b border-gray-200 dark:border-white/10 pb-3">
             <div className="flex items-center gap-4 flex-grow">
-              <h2 className="font-serif font-black text-xl text-gray-900 dark:text-white flex-shrink-0">
+              <h2 className="font-serif font-black text-lg sm:text-xl text-gray-900 dark:text-white flex-shrink-0">
                 Featured Headlines
               </h2>
               <div className="h-0.5 bg-red-600 flex-grow max-w-xs" />
@@ -1316,13 +1348,13 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 items-stretch">
             
             {/* Left Column: Big Vertical In-Depth Editorial Card */}
             {featuredArticles[0] && (
               <div 
                 onClick={() => setReadingStory(featuredArticles[0])}
-                className="lg:col-span-4 bg-white dark:bg-[#0e1428] rounded-2xl border border-gray-200 dark:border-white/10 overflow-hidden shadow-sm hover:shadow-md transition-all group cursor-pointer flex flex-col justify-between"
+                className="md:col-span-1 lg:col-span-4 bg-white dark:bg-[#0e1428] rounded-2xl border border-gray-200 dark:border-white/10 overflow-hidden shadow-sm hover:shadow-md transition-all group cursor-pointer flex flex-col justify-between"
               >
                 <div className="aspect-[16/10] overflow-hidden bg-gray-200 dark:bg-gray-800">
                   <img 
@@ -1335,7 +1367,7 @@ export default function HomePage() {
                     }}
                   />
                 </div>
-                <div className="p-5 space-y-2.5">
+                <div className="p-4 sm:p-5 space-y-2.5">
                   <div className="flex items-center gap-2 text-[11px]">
                     <span className="px-2.5 py-0.5 rounded bg-red-600 text-white font-bold uppercase text-[10px]">
                       {featuredArticles[0].category}
@@ -1353,12 +1385,12 @@ export default function HomePage() {
             )}
 
             {/* Middle Column: 2 Stacked Wide Landscape Cards */}
-            <div className="lg:col-span-5 space-y-4 flex flex-col justify-between">
+            <div className="md:col-span-1 lg:col-span-5 space-y-4 flex flex-col justify-between">
               {featuredArticles.slice(1, 3).map((art, idx) => (
                 <div 
                   key={art.id || idx}
                   onClick={() => setReadingStory(art)}
-                  className="relative rounded-2xl overflow-hidden aspect-[16/8] group cursor-pointer border border-gray-200 dark:border-white/10 shadow-sm"
+                  className="relative rounded-2xl overflow-hidden aspect-[16/9] sm:aspect-[16/8] group cursor-pointer border border-gray-200 dark:border-white/10 shadow-sm"
                 >
                   <img 
                     src={resolveNewsImage(art.image, art.category, art.title, idx + 1)} 
@@ -1375,7 +1407,7 @@ export default function HomePage() {
                     <Share2 className="w-3.5 h-3.5" />
                   </div>
 
-                  <div className="absolute bottom-0 inset-x-0 p-5 space-y-1.5 text-white">
+                  <div className="absolute bottom-0 inset-x-0 p-4 sm:p-5 space-y-1.5 text-white">
                     <div className="flex items-center gap-2 text-[10px]">
                       <span className="px-2 py-0.5 bg-red-600 text-white font-black uppercase rounded shadow-sm">
                         {art.category}
@@ -1391,26 +1423,28 @@ export default function HomePage() {
             </div>
 
             {/* Right Column: Verified AI News Intelligence & Spotlight */}
-            <div className="lg:col-span-3 space-y-4 flex flex-col justify-between">
+            <div className="md:col-span-2 lg:col-span-3 space-y-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4 items-stretch">
               
               {/* Extra Real News Card: Spotlight Story */}
               {featuredArticles[3] && (
                 <div 
                   onClick={() => setReadingStory(featuredArticles[3])}
-                  className="bg-white dark:bg-[#0e1428] rounded-2xl p-4 border border-gray-200 dark:border-white/10 space-y-2 shadow-sm hover:shadow-md transition-all group cursor-pointer"
+                  className="bg-white dark:bg-[#0e1428] rounded-2xl p-4 border border-gray-200 dark:border-white/10 space-y-2 shadow-sm hover:shadow-md transition-all group cursor-pointer flex flex-col justify-between"
                 >
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-black text-red-600 uppercase tracking-wider">
-                      Spotlight Story
-                    </span>
-                    <span className="text-[10px] text-gray-400">{featuredArticles[3].date}</span>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-black text-red-600 uppercase tracking-wider">
+                        Spotlight Story
+                      </span>
+                      <span className="text-[10px] text-gray-400">{featuredArticles[3].date}</span>
+                    </div>
+                    <h4 className="font-serif font-bold text-xs text-gray-900 dark:text-white leading-snug group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors line-clamp-2">
+                      {featuredArticles[3].title}
+                    </h4>
                   </div>
-                  <h4 className="font-serif font-bold text-xs text-gray-900 dark:text-white leading-snug group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors line-clamp-2">
-                    {featuredArticles[3].title}
-                  </h4>
-                  <div className="flex items-center justify-between text-[11px] text-gray-500 pt-1 border-t border-gray-100 dark:border-white/5">
-                    <span>By {featuredArticles[3].author}</span>
-                    <span className="text-red-600 font-bold flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
+                  <div className="flex items-center justify-between text-[11px] text-gray-500 pt-2 border-t border-gray-100 dark:border-white/5">
+                    <span className="truncate max-w-[120px]">By {featuredArticles[3].author}</span>
+                    <span className="text-red-600 font-bold flex items-center gap-1 group-hover:translate-x-0.5 transition-transform flex-shrink-0">
                       Read <ArrowRight className="w-3 h-3" />
                     </span>
                   </div>
@@ -1418,7 +1452,7 @@ export default function HomePage() {
               )}
 
               {/* TruthLens News Verification Card */}
-              <div className="rounded-2xl p-5 bg-gradient-to-br from-red-600 via-rose-700 to-black text-white space-y-3 shadow-lg flex flex-col justify-between flex-grow">
+              <div className="rounded-2xl p-4 sm:p-5 bg-gradient-to-br from-red-600 via-rose-700 to-black text-white space-y-3 shadow-lg flex flex-col justify-between">
                 <div className="space-y-2">
                   <div className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider">
                     <Sparkles className="w-4 h-4 text-amber-300" />
@@ -1445,18 +1479,18 @@ export default function HomePage() {
       </section>
 
       {/* ================= 4. SECTION 3: CATEGORIES GALLERY WITH ACCURATE DYNAMIC FILTERING ================= */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-6">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-6">
         
         {/* Section Header */}
-        <div className="flex flex-wrap items-center justify-between gap-4 border-b border-gray-200 dark:border-white/10 pb-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 border-b border-gray-200 dark:border-white/10 pb-3">
           <div className="flex items-center gap-4 flex-grow">
-            <h2 className="font-serif font-black text-xl text-gray-900 dark:text-white flex-shrink-0">
+            <h2 className="font-serif font-black text-lg sm:text-xl text-gray-900 dark:text-white flex-shrink-0">
               Categories Gallery
             </h2>
             <div className="h-0.5 bg-red-600 flex-grow max-w-xs" />
           </div>
 
-          <div className="flex items-center gap-2 sm:gap-3 text-xs font-bold">
+          <div className="flex items-center gap-1.5 sm:gap-3 text-xs font-bold overflow-x-auto max-w-full pb-1 scrollbar-none flex-nowrap">
             {[
               { label: 'Sports', value: 'SPORTS' },
               { label: 'Technology', value: 'TECHNOLOGY' },
@@ -1470,7 +1504,7 @@ export default function HomePage() {
                 <button
                   key={tab.label}
                   onClick={() => setSelectedGalleryCategory(tab.value)}
-                  className={`transition-all px-3 py-1 rounded-md cursor-pointer ${
+                  className={`transition-all px-3 py-1 rounded-md cursor-pointer flex-shrink-0 whitespace-nowrap ${
                     isActive
                       ? 'bg-red-600 text-white font-black shadow-sm'
                       : 'text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5'
@@ -1487,7 +1521,7 @@ export default function HomePage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 items-stretch">
           
           {/* Left Column: 2 Stacked Cards */}
-          <div className="lg:col-span-3 space-y-6 flex flex-col justify-between">
+          <div className="md:col-span-1 lg:col-span-3 space-y-6 flex flex-col justify-between">
             {galleryArticles.slice(0, 2).map((art, idx) => (
               <div 
                 key={art.id || idx}
@@ -1520,7 +1554,7 @@ export default function HomePage() {
           {galleryArticles[2] && (
             <div 
               onClick={() => setReadingStory(galleryArticles[2])}
-              className="lg:col-span-6 relative rounded-3xl overflow-hidden group cursor-pointer border border-gray-200 dark:border-white/10 shadow-lg min-h-[380px]"
+              className="md:col-span-2 lg:col-span-6 relative rounded-3xl overflow-hidden group cursor-pointer border border-gray-200 dark:border-white/10 shadow-lg min-h-[300px] sm:min-h-[380px]"
             >
               <img 
                 src={resolveNewsImage(galleryArticles[2].image, galleryArticles[2].category, galleryArticles[2].title, 2)} 
@@ -1533,11 +1567,11 @@ export default function HomePage() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
               
-              <div className="absolute bottom-0 inset-x-0 p-8 space-y-2 text-white">
-                <span className="px-3 py-1 bg-red-600 text-white text-xs font-black uppercase rounded shadow-sm">
+              <div className="absolute bottom-0 inset-x-0 p-5 sm:p-8 space-y-2 text-white">
+                <span className="px-2.5 sm:px-3 py-0.5 sm:py-1 bg-red-600 text-white text-[11px] sm:text-xs font-black uppercase rounded shadow-sm">
                   {galleryArticles[2].category}
                 </span>
-                <h3 className="font-serif font-black text-2xl sm:text-3xl leading-tight group-hover:text-red-400 transition-colors">
+                <h3 className="font-serif font-black text-xl sm:text-2xl lg:text-3xl leading-tight group-hover:text-red-400 transition-colors">
                   {galleryArticles[2].title}
                 </h3>
                 <p className="text-xs text-gray-200 line-clamp-2 max-w-xl font-sans">
@@ -1548,7 +1582,7 @@ export default function HomePage() {
           )}
 
           {/* Right Column: 2 Stacked Cards */}
-          <div className="lg:col-span-3 space-y-6 flex flex-col justify-between">
+          <div className="md:col-span-1 lg:col-span-3 space-y-6 flex flex-col justify-between">
             {galleryArticles.slice(3, 5).map((art, idx) => (
               <div 
                 key={art.id || idx}
@@ -1584,17 +1618,17 @@ export default function HomePage() {
       {/* ================= 5. ARTICLE READER MODAL WITH EXPANDED DETAILS & 1-CLICK AI VERIFICATION ================= */}
       <AnimatePresence>
         {readingStory && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-xl">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-6 bg-black/80 backdrop-blur-xl">
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="bg-white dark:bg-[#0c1224] rounded-3xl max-w-4xl w-full max-h-[92vh] overflow-hidden flex flex-col shadow-2xl border border-gray-200 dark:border-white/10"
+              className="bg-white dark:bg-[#0c1224] rounded-2xl sm:rounded-3xl max-w-4xl w-full max-h-[94vh] sm:max-h-[92vh] overflow-hidden flex flex-col shadow-2xl border border-gray-200 dark:border-white/10"
             >
               {/* Modal Header */}
-              <div className="p-4 sm:p-6 border-b border-gray-200 dark:border-white/10 flex items-center justify-between bg-gray-50 dark:bg-black/40">
+              <div className="p-3.5 sm:p-6 border-b border-gray-200 dark:border-white/10 flex items-center justify-between bg-gray-50 dark:bg-black/40 gap-3">
                 <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
-                  <span className="px-3 py-1 rounded bg-red-600 text-white text-xs font-black uppercase tracking-wider shadow-sm">
+                  <span className="px-2.5 sm:px-3 py-0.5 sm:py-1 rounded bg-red-600 text-white text-[11px] sm:text-xs font-black uppercase tracking-wider shadow-sm">
                     {readingStory.category}
                   </span>
                   <span className="text-xs font-bold text-gray-700 dark:text-gray-300">
@@ -1611,14 +1645,14 @@ export default function HomePage() {
                 </div>
                 <button
                   onClick={() => setReadingStory(null)}
-                  className="w-9 h-9 rounded-full bg-gray-200 dark:bg-white/10 flex items-center justify-center text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white hover:bg-gray-300 dark:hover:bg-white/20 transition-colors cursor-pointer"
+                  className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gray-200 dark:bg-white/10 flex items-center justify-center text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white hover:bg-gray-300 dark:hover:bg-white/20 transition-colors cursor-pointer flex-shrink-0"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
               {/* Modal Body */}
-              <div className="p-6 sm:p-8 space-y-6 overflow-y-auto flex-grow">
+              <div className="p-4 sm:p-8 space-y-4 sm:space-y-6 overflow-y-auto flex-grow">
                 
                 {/* Cover Image */}
                 <div className="aspect-[16/9] rounded-2xl overflow-hidden shadow-md bg-gray-100 dark:bg-gray-800">
@@ -1635,18 +1669,18 @@ export default function HomePage() {
 
                 {/* Title & Metadata */}
                 <div className="space-y-3">
-                  <h1 className="font-serif font-black text-2xl sm:text-3xl lg:text-4xl text-gray-900 dark:text-white leading-tight">
+                  <h1 className="font-serif font-black text-xl sm:text-3xl lg:text-4xl text-gray-900 dark:text-white leading-tight">
                     {readingStory.title}
                   </h1>
                   
-                  <div className="flex flex-wrap items-center justify-between gap-4 text-xs text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-white/10 pb-4">
+                  <div className="flex flex-wrap items-center justify-between gap-3 sm:gap-4 text-xs text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-white/10 pb-4">
                     <div className="flex items-center gap-2">
                       <div className="w-6 h-6 rounded-full bg-red-600 flex items-center justify-center text-white font-bold text-xs">
                         {readingStory.author ? readingStory.author.charAt(0) : 'T'}
                       </div>
                       <span>Reported by <strong className="text-gray-900 dark:text-white">{readingStory.author}</strong></span>
                     </div>
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-3 sm:gap-4">
                       <span>{readingStory.date}</span>
                       <span>&bull;</span>
                       <span>{readingStory.views || 2400} Readers</span>
@@ -1712,10 +1746,10 @@ export default function HomePage() {
               </div>
 
               {/* Modal Bottom Action Bar */}
-              <div className="p-4 sm:p-5 border-t border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-black/60 flex items-center justify-between">
+              <div className="p-3.5 sm:p-5 border-t border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-black/60 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 sm:gap-4">
                 <button
                   onClick={() => setReadingStory(null)}
-                  className="px-5 py-2.5 rounded-xl bg-gray-200 dark:bg-white/10 text-xs font-bold text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-white/20 transition-colors cursor-pointer"
+                  className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-gray-200 dark:bg-white/10 text-xs font-bold text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-white/20 transition-colors cursor-pointer text-center"
                 >
                   Close
                 </button>
@@ -1726,7 +1760,7 @@ export default function HomePage() {
                     setReadingStory(null);
                     handleAnalyzeArticle(story.title, story.fullContent);
                   }}
-                  className="px-6 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-black text-xs uppercase tracking-wider flex items-center gap-2 cursor-pointer shadow-md transition-all hover:scale-105 active:scale-95"
+                  className="w-full sm:w-auto justify-center px-6 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-black text-xs uppercase tracking-wider flex items-center gap-2 cursor-pointer shadow-md transition-all hover:scale-105 active:scale-95"
                 >
                   <Search className="w-3.5 h-3.5" />
                   <span>Verify Article with AI</span>

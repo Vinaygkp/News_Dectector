@@ -14,7 +14,7 @@ const technologies = [
 
 export default function AboutPage() {
   return (
-    <div className="bg-[#000000] text-white pt-36 sm:pt-40 pb-20 min-h-screen">
+    <div className="bg-[#000000] text-white pt-24 sm:pt-28 md:pt-36 pb-16 sm:pb-20 min-h-screen">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header */}
@@ -65,7 +65,7 @@ export default function AboutPage() {
               <Cpu className="w-4 h-4 text-cyan-400" /> Technology Used
             </h3>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 xs:grid-cols-2 gap-2.5 sm:gap-3">
               {technologies.map((tech) => {
                 const Icon = tech.icon;
                 return (

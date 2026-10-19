@@ -107,44 +107,44 @@ export default function AnalyzerPage() {
   return (
     <div 
       onKeyDown={handleKeyDown}
-      className="bg-slate-50 dark:bg-[#000000] text-slate-900 dark:text-white pt-36 sm:pt-40 pb-24 min-h-screen relative overflow-hidden transition-colors duration-300"
+      className="bg-slate-50 dark:bg-[#000000] text-slate-900 dark:text-white pt-24 sm:pt-28 md:pt-36 pb-16 sm:pb-24 min-h-screen relative overflow-hidden transition-colors duration-300"
     >
       
       {/* Background Ambient Glows */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-28 left-10 w-[500px] h-[500px] bg-cyan-600/10 dark:bg-cyan-500/15 rounded-full blur-[140px]" />
-        <div className="absolute top-1/2 right-10 w-[500px] h-[500px] bg-purple-600/10 dark:bg-purple-500/15 rounded-full blur-[150px]" />
-        <div className="absolute bottom-10 left-1/3 w-[450px] h-[450px] bg-pink-600/10 dark:bg-pink-500/15 rounded-full blur-[140px]" />
+        <div className="absolute top-28 left-10 w-[280px] sm:w-[500px] h-[280px] sm:h-[500px] bg-cyan-600/10 dark:bg-cyan-500/15 rounded-full blur-[100px] sm:blur-[140px]" />
+        <div className="absolute top-1/2 right-10 w-[280px] sm:w-[500px] h-[280px] sm:h-[500px] bg-purple-600/10 dark:bg-purple-500/15 rounded-full blur-[100px] sm:blur-[150px]" />
+        <div className="absolute bottom-10 left-1/3 w-[260px] sm:w-[450px] h-[260px] sm:h-[450px] bg-pink-600/10 dark:bg-pink-500/15 rounded-full blur-[100px] sm:blur-[140px]" />
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-8">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-6 sm:space-y-8">
         
         {/* Page Header */}
-        <div className="text-center space-y-3">
+        <div className="text-center space-y-2 sm:space-y-3">
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 dark:bg-cyan-950/70 border border-cyan-500/30 dark:border-cyan-500/50 text-cyan-700 dark:text-cyan-300 text-xs font-black uppercase tracking-wider shadow-sm"
+            className="inline-flex items-center gap-2 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-cyan-500/10 dark:bg-cyan-950/70 border border-cyan-500/30 dark:border-cyan-500/50 text-cyan-700 dark:text-cyan-300 text-[11px] sm:text-xs font-black uppercase tracking-wider shadow-sm"
           >
             <Sparkles className="w-3.5 h-3.5 text-pink-500" />
             <span>NEWS VERIFICATION TOOL</span>
           </motion.div>
 
-          <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-slate-900 dark:text-white font-serif">
+          <h1 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight text-slate-900 dark:text-white font-serif">
             Check Any News Story
           </h1>
-          <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+          <p className="text-gray-600 dark:text-gray-300 text-xs sm:text-base max-w-2xl mx-auto leading-relaxed">
             Paste any news headline or full article text below to verify whether it matches verified journalistic reporting or fake news patterns.
           </p>
         </div>
 
         {/* Quick Sample Selector */}
-        <div className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-[#030611]/80 border border-gray-200 dark:border-white/10 shadow-sm dark:shadow-[0_0_25px_rgba(0,0,0,0.8)] flex flex-wrap items-center justify-between gap-3 backdrop-blur-xl">
-          <div className="flex items-center gap-2 text-xs font-bold text-gray-800 dark:text-gray-200">
+        <div className="p-3.5 sm:p-5 rounded-2xl bg-white dark:bg-[#030611]/80 border border-gray-200 dark:border-white/10 shadow-sm dark:shadow-[0_0_25px_rgba(0,0,0,0.8)] flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3 backdrop-blur-xl">
+          <div className="flex items-center gap-2 text-xs font-bold text-gray-800 dark:text-gray-200 flex-shrink-0">
             <Sparkles className="w-4 h-4 text-cyan-500 dark:text-cyan-400" />
             <span>Quick Test Templates:</span>
           </div>
-          <div className="flex flex-wrap gap-2.5">
+          <div className="flex flex-wrap gap-2">
             {sampleArticles.map((sample) => {
               const isSelected = activeSampleId === sample.id;
               return (
@@ -156,7 +156,7 @@ export default function AnalyzerPage() {
                     setActiveSampleId(sample.id);
                     setValidationError('');
                   }}
-                  className={`px-4 py-2 rounded-xl border text-xs font-bold transition-all cursor-pointer shadow-sm flex items-center gap-2 ${
+                  className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl border text-[11px] sm:text-xs font-bold transition-all cursor-pointer shadow-sm flex items-center gap-1.5 sm:gap-2 ${
                     isSelected
                       ? `${sample.badgeClass} ring-2 ring-cyan-500/30 scale-[1.02]`
                       : 'bg-gray-100 hover:bg-gray-200 dark:bg-white/5 dark:hover:bg-white/10 border-gray-300 dark:border-white/10 text-gray-700 dark:text-gray-300'
@@ -174,11 +174,11 @@ export default function AnalyzerPage() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#030611]/90 border border-gray-200 dark:border-white/15 shadow-xl dark:shadow-[0_0_40px_rgba(0,0,0,0.9)] space-y-6 backdrop-blur-xl transition-colors duration-300"
+          className="p-4 sm:p-8 rounded-2xl sm:rounded-3xl bg-white dark:bg-[#030611]/90 border border-gray-200 dark:border-white/15 shadow-xl dark:shadow-[0_0_40px_rgba(0,0,0,0.9)] space-y-5 sm:space-y-6 backdrop-blur-xl transition-colors duration-300"
         >
           {/* Validation Alert */}
           {validationError && (
-            <div className="p-4 rounded-2xl bg-red-50 dark:bg-red-950/60 border border-red-300 dark:border-red-500/40 text-red-700 dark:text-red-300 text-xs font-bold flex items-center gap-2.5 animate-pulse">
+            <div className="p-3.5 sm:p-4 rounded-xl sm:rounded-2xl bg-red-50 dark:bg-red-950/60 border border-red-300 dark:border-red-500/40 text-red-700 dark:text-red-300 text-xs font-bold flex items-center gap-2.5 animate-pulse">
               <AlertCircle className="w-4 h-4 text-rose-500 flex-shrink-0" />
               <span>{validationError}</span>
             </div>
@@ -215,7 +215,7 @@ export default function AnalyzerPage() {
                 if (validationError) setValidationError('');
               }}
               placeholder="e.g., Central bank announces new interest rate policy / Scientists discover clean energy breakthrough..."
-              className="w-full px-4 py-3.5 rounded-xl bg-gray-50 dark:bg-black/80 border border-gray-300 dark:border-white/15 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 text-slate-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 text-sm font-medium transition-all outline-none shadow-sm"
+              className="w-full px-3.5 sm:px-4 py-3 sm:py-3.5 rounded-xl bg-gray-50 dark:bg-black/80 border border-gray-300 dark:border-white/15 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 text-slate-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 text-sm font-medium transition-all outline-none shadow-sm"
             />
           </div>
 
@@ -242,7 +242,7 @@ export default function AnalyzerPage() {
               </div>
             </div>
             <textarea
-              rows={8}
+              rows={6}
               value={content}
               onChange={(e) => {
                 setContent(e.target.value);
@@ -250,28 +250,28 @@ export default function AnalyzerPage() {
                 if (validationError) setValidationError('');
               }}
               placeholder="Paste or type the full news article body, claim, or report text here for detailed linguistic verification..."
-              className="w-full px-4 py-3.5 rounded-xl bg-gray-50 dark:bg-black/80 border border-gray-300 dark:border-white/15 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 text-slate-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 text-sm leading-relaxed font-sans transition-all outline-none resize-y shadow-sm font-normal"
+              className="w-full px-3.5 sm:px-4 py-3 sm:py-3.5 rounded-xl bg-gray-50 dark:bg-black/80 border border-gray-300 dark:border-white/15 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 text-slate-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 text-sm leading-relaxed font-sans transition-all outline-none resize-y shadow-sm font-normal"
             />
           </div>
 
           {/* Metrics Counter Bar */}
-          <div className="p-4 rounded-2xl bg-gray-100 dark:bg-black/60 border border-gray-200 dark:border-white/10 flex flex-wrap items-center justify-between gap-4 text-xs font-bold text-gray-700 dark:text-gray-300">
-            <div className="flex items-center gap-6">
-              <span>Total Characters: <strong className="text-cyan-600 dark:text-cyan-300 font-mono text-sm">{totalChars}</strong></span>
-              <span>Total Words: <strong className="text-purple-600 dark:text-purple-300 font-mono text-sm">{totalWords}</strong></span>
+          <div className="p-3.5 sm:p-4 rounded-xl sm:rounded-2xl bg-gray-100 dark:bg-black/60 border border-gray-200 dark:border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 sm:gap-4 text-xs font-bold text-gray-700 dark:text-gray-300">
+            <div className="flex items-center gap-4 sm:gap-6 flex-wrap">
+              <span>Total Characters: <strong className="text-cyan-600 dark:text-cyan-300 font-mono text-xs sm:text-sm">{totalChars}</strong></span>
+              <span>Total Words: <strong className="text-purple-600 dark:text-purple-300 font-mono text-xs sm:text-sm">{totalWords}</strong></span>
             </div>
-            <div className="flex items-center gap-2 text-[11px] text-gray-500 dark:text-gray-400">
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+            <div className="flex items-center gap-1.5 sm:gap-2 text-[11px] text-gray-500 dark:text-gray-400">
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0" />
               <span>Vocabulary & Writing Style Evaluation</span>
             </div>
           </div>
 
           {/* Action Buttons */}
-          <div className="flex flex-wrap items-center justify-between gap-4 pt-2">
+          <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-2">
             <button
               type="button"
               onClick={handleClear}
-              className="px-6 py-3.5 rounded-xl bg-gray-100 hover:bg-gray-200 dark:bg-black/60 dark:hover:bg-white/5 border border-gray-300 dark:border-white/15 text-gray-700 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 transition-all cursor-pointer shadow-sm active:scale-95"
+              className="w-full sm:w-auto justify-center px-5 sm:px-6 py-3 sm:py-3.5 rounded-xl bg-gray-100 hover:bg-gray-200 dark:bg-black/60 dark:hover:bg-white/5 border border-gray-300 dark:border-white/15 text-gray-700 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white font-bold text-xs uppercase tracking-wider flex items-center gap-2 transition-all cursor-pointer shadow-sm active:scale-95"
             >
               <RotateCcw className="w-4 h-4" />
               <span>Clear Text</span>
@@ -280,7 +280,7 @@ export default function AnalyzerPage() {
             <button
               type="button"
               onClick={handleAnalyze}
-              className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 via-purple-600 to-pink-500 hover:opacity-95 text-white font-black text-sm uppercase tracking-wider shadow-[0_0_30px_rgba(6,182,212,0.4)] flex items-center gap-2.5 transition-all cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
+              className="w-full sm:w-auto justify-center px-6 sm:px-8 py-3 sm:py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 via-purple-600 to-pink-500 hover:opacity-95 text-white font-black text-xs sm:text-sm uppercase tracking-wider shadow-[0_0_30px_rgba(6,182,212,0.4)] flex items-center gap-2.5 transition-all cursor-pointer hover:scale-[1.02] active:scale-[0.98]"
             >
               <Search className="w-4 h-4 stroke-[3]" />
               <span>Check News Authenticity</span>
